@@ -1,0 +1,12 @@
+.home {
+  color: #0c2a54;
+  background: #ffffff;
+}
+
+.home *,
+.home *::before,
+.home *::after {
+  box-sizing: border-box;
+}
+
+
