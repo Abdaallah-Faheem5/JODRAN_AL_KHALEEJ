@@ -1,7 +1,9 @@
 import {
   FaCalendarCheck,
   FaMapMarkerAlt,
+  FaUserTie,
 } from 'react-icons/fa';
+import ProjectSphere from '../../components/ProjectSphere/ProjectSphere';
 import projects from '../../data/projects';
 import styles from './Projects.module.css';
 
@@ -9,6 +11,9 @@ const Projects = () => {
   return (
     <main className={styles.projectsPage}>
       <section className={styles.hero} id="projects">
+        <div className={styles.heroSphereWrap} aria-hidden="true">
+          <ProjectSphere className={styles.heroSphere} />
+        </div>
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>Projects</p>
           <h1>Selected contracting work across Saudi Arabia.</h1>
@@ -28,16 +33,30 @@ const Projects = () => {
 
         <div className={styles.grid}>
           {projects.map((project) => (
-            <article className={styles.card} key={project.title}>
+            <article className={styles.card} key={project.id}>
               <project.icon className={styles.cardIcon} aria-hidden="true" />
               <div className={styles.cardBody}>
-                <span className={styles.category}>{project.category}</span>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
+                <span className={styles.category}>{project.department}</span>
+                <h3>{project.project}</h3>
+                <p>{project.scope}</p>
+                <dl className={styles.details}>
+                  <div>
+                    <dt>Client</dt>
+                    <dd>{project.client}</dd>
+                  </div>
+                  <div>
+                    <dt>Main Contractor</dt>
+                    <dd>{project.mainContractor}</dd>
+                  </div>
+                </dl>
                 <div className={styles.meta}>
                   <span>
                     <FaMapMarkerAlt aria-hidden="true" />
                     {project.location}
+                  </span>
+                  <span>
+                    <FaUserTie aria-hidden="true" />
+                    {project.client}
                   </span>
                   <span>
                     <FaCalendarCheck aria-hidden="true" />
