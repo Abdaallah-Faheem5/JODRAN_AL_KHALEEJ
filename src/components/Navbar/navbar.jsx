@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import logo from '../../assets/icons/logo2.png';
 import styles from './navbar.module.css';
@@ -10,7 +11,6 @@ const navLinks = [
   { label: 'Services', href: '/service' },
   { label: 'Leadership', href: '/leadership' },
   { label: 'Equipment', href: '/equipment' },
-  
 ];
 
 const Navbar = () => {
@@ -22,10 +22,10 @@ const Navbar = () => {
   return (
     <header className={styles.header}>
       <nav className={styles.navbar} aria-label="Main navigation">
-        <a className={styles.brand} href="/" onClick={closeMenu}>
+        <Link className={styles.brand} to="/" onClick={closeMenu}>
           <img className={styles.logo} src={logo} alt="Jodran logo" />
           <span className={styles.brandText}>JODRAN AL KHALEEJ</span>
-        </a>
+        </Link>
 
         <button
           className={styles.menuButton}
@@ -39,22 +39,25 @@ const Navbar = () => {
 
         <div className={`${styles.links} ${isOpen ? styles.linksOpen : ''}`}>
           {navLinks.map((link) => (
-            <a
+            <NavLink
               key={link.href}
-              className={link.icon ? styles.mobileAction : undefined}
-              href={link.href}
+              className={({ isActive }) => 
+                `${link.icon ? styles.mobileAction : ''} ${isActive ? styles.activeLink : ''}`
+              }
+              to={link.href}
               onClick={closeMenu}
+              end={link.href === '/'}
             >
               <span className={styles.desktopLabel}>{link.label}</span>
               {link.mobileLabel && (
                 <span className={styles.mobileLabel}>{link.mobileLabel}</span>
               )}
               {link.icon && <link.icon className={styles.mobileIcon} aria-hidden="true" />}
-            </a>
+            </NavLink>
           ))}
-          <a className={styles.cta} href="/#about" onClick={closeMenu}>
+          <Link className={styles.cta} to="/#about" onClick={closeMenu}>
             About
-          </a>
+          </Link>
         </div>
       </nav>
     </header>

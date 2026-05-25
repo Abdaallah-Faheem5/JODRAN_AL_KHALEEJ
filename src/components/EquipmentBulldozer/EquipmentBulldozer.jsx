@@ -421,7 +421,7 @@ const EquipmentBulldozer = ({ className }) => {
             for (let vi = 0; vi <= vS; vi++) {
               const t = vi / vS;
               const a = -arc / 2 + t * arc;
-              pos.push(x, R * Math.sin(a), arcCZ - R * Math.cos(a));
+              pos.push(x, r * Math.sin(a), arcCZ - r * Math.cos(a));
               nor.push(0, nd * Math.sin(a), nd * -Math.cos(a));
               uv.push(xf, t);
             }

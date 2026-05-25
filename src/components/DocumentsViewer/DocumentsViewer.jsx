@@ -70,11 +70,6 @@ const DocumentsViewer = ({ className }) => {
         roughness: 0.14,
         metalness: 0.92,
       });
-      const lineMat = new THREE.LineBasicMaterial({
-        color: 0x0c2a54,
-        transparent: true,
-        opacity: 0.45,
-      });
       const gridMat = new THREE.LineBasicMaterial({
         color: 0x10b981,
         transparent: true,

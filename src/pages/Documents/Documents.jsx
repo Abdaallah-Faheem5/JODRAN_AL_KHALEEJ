@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './Documents.module.css';
 import { FaFilePdf, FaDownload, FaCheck, FaSpinner } from 'react-icons/fa';
 import DocumentsViewer from '../../components/DocumentsViewer/DocumentsViewer';
@@ -48,7 +49,9 @@ const documentsList = [
   },
 ];
 
-const Documents = ({ isDedicatedPage = window.location.pathname === '/documents' }) => {
+const Documents = ({ isDedicatedPage }) => {
+  const location = useLocation();
+  const showHero = isDedicatedPage !== undefined ? isDedicatedPage : location.pathname === '/documents';
   const [downloadStates, setDownloadStates] = useState({});
 
   const handleDownload = (docId, docTitle) => {
@@ -91,7 +94,7 @@ const Documents = ({ isDedicatedPage = window.location.pathname === '/documents'
   return (
     <main className={styles.documentsPage}>
       {/* Hero Section */}
-      {isDedicatedPage && (
+      {showHero && (
         <section className={styles.hero} id="documents-hero">
           <div className={styles.heroSphereWrap} aria-hidden="true">
             <DocumentsViewer className={styles.heroSphere} />

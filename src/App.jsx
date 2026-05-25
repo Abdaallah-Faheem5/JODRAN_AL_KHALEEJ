@@ -8,35 +8,24 @@ import Leadership from './pages/Leadership/Leadership'
 import Equipment from './pages/Equipment/Equipment'
 import Documents from './pages/Documents/Documents'
 import './App.css'
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const isProjectsPage = window.location.pathname === '/projects'
-  const isClientPage = window.location.pathname === '/client' || window.location.pathname.startsWith('/client/')
-  const isServicePage = window.location.pathname === '/service'
-  const isLeadershipPage = window.location.pathname === '/leadership'
-  const isEquipmentPage = window.location.pathname === '/equipment'
-  const isDocumentsPage = window.location.pathname === '/documents'
-
   return (
-    <>
+    <HashRouter>
       <Navbar />
-      {isProjectsPage ? (
-        <Projects />
-      ) : isClientPage ? (
-        <Client />
-      ) : isServicePage ? (
-        <Service />
-      ) : isLeadershipPage ? (
-        <Leadership />
-      ) : isEquipmentPage ? (
-        <Equipment />
-      ) : isDocumentsPage ? (
-        <Documents />
-      ) : (
-        <Home />
-      )}
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/projects' element={<Projects />} />
+        <Route path='/client' element={<Client />} />
+        <Route path='/client/:id' element={<Client />} />
+        <Route path='/service' element={<Service />} />
+        <Route path='/leadership' element={<Leadership />} />
+        <Route path='/equipment' element={<Equipment />} />
+        <Route path='/documents' element={<Documents />} />
+      </Routes>
       <Footer />
-    </>
+    </HashRouter>
   )
 }
 

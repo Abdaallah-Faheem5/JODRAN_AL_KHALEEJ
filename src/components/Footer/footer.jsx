@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
   FaEnvelope,
   FaMapMarkerAlt,
@@ -22,20 +23,15 @@ const companyLinks = [
 
 const Footer = () => {
   const year = new Date().getFullYear();
-  const topHref = window.location.pathname === '/projects'
-    ? '#projects'
-    : window.location.pathname === '/client'
-      ? '#client'
-      : '#home';
 
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.brandColumn}>
-          <a className={styles.brand} href="/" aria-label="Jodran Al Khaleej home">
+          <Link className={styles.brand} to="/" aria-label="Jodran Al Khaleej home">
             <img src={logo} alt="Jodran logo" />
             <span>JODRAN AL KHALEEJ</span>
-          </a>
+          </Link>
           <p>
             JODRAN AL KHALEEJ AL MUSTAQBAL CO. LTD.
             Establishment began as a General works
@@ -46,18 +42,18 @@ const Footer = () => {
         <nav className={styles.linkColumn} aria-label="Footer navigation">
           <h2>Quick Links</h2>
           {quickLinks.map((link) => (
-            <a key={link.href} href={link.href}>
+            <Link key={link.href} to={link.href}>
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
         <nav className={styles.linkColumn} aria-label="Company navigation">
           <h2>Company</h2>
           {companyLinks.map((link) => (
-            <a key={link.href} href={link.href}>
+            <Link key={link.href} to={link.href}>
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -80,7 +76,12 @@ const Footer = () => {
 
       <div className={styles.bottomBar}>
         <p>© {year} Jodran Al Khaleej. All rights reserved.</p>
-        <a href={topHref}>Back to top</a>
+        <button
+          className={styles.backToTop}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          Back to top
+        </button>
       </div>
     </footer>
   );

@@ -76,6 +76,11 @@
   outline: none;
 }
 
+.activeLink {
+  color: #f47b20 !important;
+  background-color: rgba(244, 123, 32, 0.08);
+}
+
 .links .cta {
   margin-left: 8px;
   padding: 0 18px;

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
   FaCalendarCheck,
   FaMapMarkerAlt,
@@ -51,9 +52,9 @@ const Projects = () => {
                     <div>
                       <dt>Client</dt>
                       <dd>
-                        <a className={styles.clientLink} href={clientHref}>
+                        <Link className={styles.clientLink} to={clientHref}>
                           {project.client}
-                        </a>
+                        </Link>
                       </dd>
                     </div>
                     <div>
@@ -66,10 +67,10 @@ const Projects = () => {
                       <FaMapMarkerAlt aria-hidden="true" />
                       {project.location}
                     </span>
-                    <a className={styles.metaLink} href={clientHref}>
+                    <Link className={styles.metaLink} to={clientHref}>
                       <FaUserTie aria-hidden="true" />
                       {project.client}
-                    </a>
+                    </Link>
                     <span>
                       <FaCalendarCheck aria-hidden="true" />
                       Delivered by Jodran teams

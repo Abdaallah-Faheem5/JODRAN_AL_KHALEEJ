@@ -1,9 +1,12 @@
 import { useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import equipment from '../../data/equipment';
 import styles from './Equipment.module.css';
 import EquipmentBulldozer from '../../components/EquipmentBulldozer/EquipmentBulldozer';
 
-const Equipment = ({ isDedicatedPage = window.location.pathname === '/equipment' }) => {
+const Equipment = ({ isDedicatedPage }) => {
+  const location = useLocation();
+  const showHero = isDedicatedPage !== undefined ? isDedicatedPage : location.pathname === '/equipment';
   const [activeCategory, setActiveCategory] = useState('All');
 
   // Extract unique categories
@@ -23,7 +26,7 @@ const Equipment = ({ isDedicatedPage = window.location.pathname === '/equipment'
   return (
     <main className={styles.equipmentPage}>
       {/* Hero Section */}
-      {isDedicatedPage && (
+      {showHero && (
         <section className={styles.hero} id="equipment-hero">
           <div className={styles.heroSphereWrap} aria-hidden="true">
             <EquipmentBulldozer className={styles.heroSphere} />

@@ -1,13 +1,16 @@
+import { useLocation, Link } from 'react-router-dom';
 import team from '../../data/team';
 import styles from './Leadership.module.css';
 import { FaUserTie, FaGraduationCap, FaBriefcase, FaArrowRight } from 'react-icons/fa';
 import LeadershipEngineer from '../../components/LeadershipEngineer/LeadershipEngineer';
 
-const Leadership = ({ isDedicatedPage = window.location.pathname === '/leadership' }) => {
+const Leadership = ({ isDedicatedPage }) => {
+  const location = useLocation();
+  const showHero = isDedicatedPage !== undefined ? isDedicatedPage : location.pathname === '/leadership';
   return (
     <main className={styles.leadershipPage}>
       {/* Hero Section */}
-      {isDedicatedPage && (
+      {showHero && (
         <section className={styles.hero} id="leadership-hero">
           <div className={styles.heroSphereWrap} aria-hidden="true">
             <LeadershipEngineer className={styles.heroSphere} />
@@ -22,10 +25,10 @@ const Leadership = ({ isDedicatedPage = window.location.pathname === '/leadershi
               management professionals dedicated to maintaining standard specifications and safety controls.
             </p>
             <div className={styles.heroActions}>
-              <a className={styles.documentBtn} href="/documents">
+              <Link className={styles.documentBtn} to="/documents">
                 View Corporate Documents
                 <FaArrowRight aria-hidden="true" />
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -76,10 +79,10 @@ const Leadership = ({ isDedicatedPage = window.location.pathname === '/leadershi
           </div>
 
           <div className={styles.sectionFooter}>
-            <a className={styles.documentBtn} href="/documents">
+            <Link className={styles.documentBtn} to="/documents">
               View Qualifications & Documents
               <FaArrowRight aria-hidden="true" />
-            </a>
+            </Link>
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import {
   FaArrowRight,
   FaCalendarCheck,
@@ -13,7 +14,7 @@ import styles from './client.module.css';
 import ClientNetwork from '../../components/ClientPerson/ClientPerson';
 
 const Client = () => {
-  const clientIdFromPath = window.location.pathname.split('/')[2];
+  const { id: clientIdFromPath } = useParams();
   const isDetailPage = Boolean(clientIdFromPath);
 
   const selectedClient = useMemo(
@@ -41,9 +42,9 @@ const Client = () => {
         <section className={styles.notFound}>
           <p className={styles.eyebrow}>Client</p>
           <h1>Client not found.</h1>
-          <a className={styles.detailsButton} href="/client">
+          <Link className={styles.detailsButton} to="/client">
             Back to Clients
-          </a>
+          </Link>
         </section>
       </main>
     );
@@ -63,9 +64,9 @@ const Client = () => {
               <h1>{selectedClient.name}</h1>
               <p>{selectedClient.details}</p>
             </div>
-            <a className={styles.backLink} href="/client">
+            <Link className={styles.backLink} to="/client">
               Back to Clients
-            </a>
+            </Link>
           </div>
           
         </section>
@@ -172,13 +173,13 @@ const Client = () => {
                     {client.relationship}
                   </span>
                 </div>
-                <a
+                <Link
                   className={styles.detailsButton}
-                  href={`/client/${client.id}`}
+                  to={`/client/${client.id}`}
                 >
                   More Details
                   <FaArrowRight aria-hidden="true" />
-                </a>
+                </Link>
               </div>
             </article>
           ))}

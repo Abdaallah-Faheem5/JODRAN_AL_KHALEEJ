@@ -1,20 +1,26 @@
 
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Hero from '../../components/Hero/hero';
 import About from '../../components/About/about';
-// eslint-disable-next-line no-unused-vars
-import Leadership from '../Leadership/Leadership';
-// eslint-disable-next-line no-unused-vars
-import Equipment from '../Equipment/Equipment';
-// eslint-disable-next-line no-unused-vars
-import Documents from '../Documents/Documents';
 import style from './Home.module.css';
 
 const Home = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash === '#about') {
+            const element = document.getElementById('about');
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [location]);
+
     return (
         <main className={style.home}>
             <Hero />
             <About />
-            
         </main>
     );
 }

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import services from '../../data/services';
 import styles from './service.module.css';
 import ClientNetwork from '../../components/ClientNetwork/ClientNetwork';
@@ -54,10 +55,10 @@ const Service = () => {
                   <p>{service.description}</p>
                 </div>
                 <div className={styles.cardFooter}>
-                  <a className={styles.ctaLink} href="/projects">
+                  <Link className={styles.ctaLink} to="/projects">
                     View Related Projects
                     <FaArrowRight aria-hidden="true" />
-                  </a>
+                  </Link>
                 </div>
               </article>
             );

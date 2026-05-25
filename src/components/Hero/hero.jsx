@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import saudiMap from '../../assets/icons/map.png';
 import styles from './hero.module.css';
 
@@ -14,9 +15,9 @@ const Hero = () => {
           safety, and disciplined project delivery.
         </p>
         <div className={styles.actions}>
-          <a className={styles.primaryButton} href="/projects">
+          <Link className={styles.primaryButton} to="/projects">
             View Projects
-          </a>
+          </Link>
           <a className={styles.secondaryButton} href="#about">
             About Company
           </a>
