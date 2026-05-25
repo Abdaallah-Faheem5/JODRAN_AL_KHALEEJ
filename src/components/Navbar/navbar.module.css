@@ -30,7 +30,7 @@
   gap: 12px;
   min-width: 0;
   flex-shrink: 0;
-  color: #0c2a54;
+  color: #12448b;
   text-decoration: none;
 }
 
@@ -62,7 +62,7 @@
   justify-content: center;
   min-height: 42px;
   padding: 0 14px;
-  color: #0c2a54;
+  color: #12448b;
   border-radius: 6px;
   font-size: 0.96rem;
   font-weight: 700;
@@ -87,7 +87,7 @@
 .links .cta:hover,
 .links .cta:focus-visible {
   color: #ffffff;
-  background: #0c2a54;
+  background: #12448b;
 }
 
 .menuButton {
@@ -97,7 +97,7 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  background: #0c2a54;
+  background: #12448b;
   border: 0;
   border-radius: 6px;
   cursor: pointer;

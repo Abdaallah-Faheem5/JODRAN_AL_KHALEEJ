@@ -37,7 +37,7 @@
 .content h2 {
   max-width: 780px;
   margin: 0;
-  color: #0c2a54;
+  color: #12448b;
   font-size: clamp(2.1rem, 4.8vw, 4.2rem);
   font-weight: 900;
   line-height: 1.05;
@@ -94,7 +94,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 26px;
-  background: #0c2a54;
+  background: #12448b;
 }
 
 .stat strong {
@@ -133,13 +133,13 @@
   height: 46px;
   padding: 11px;
   color: #ffffff;
-  background: #0c2a54;
+  background: #12448b;
   border-radius: 6px;
 }
 
 .card h3 {
   margin: 22px 0 12px;
-  color: #0c2a54;
+  color: #12448b;
   font-size: 1.14rem;
   font-weight: 900;
 }

@@ -29,7 +29,7 @@
 
 .content h1 {
   margin: 0;
-  color: #0c2a54;
+  color: #12448b;
   font-size: clamp(2.8rem, 6vw, 5.8rem);
   font-weight: 900;
   line-height: 0.95;
@@ -76,7 +76,7 @@
 }
 
 .secondaryButton {
-  color: #0c2a54;
+  color: #12448b;
   border: 2px solid rgba(12, 42, 84, 0.16);
   background: #ffffff;
 }
@@ -84,7 +84,7 @@
 .primaryButton:hover,
 .primaryButton:focus-visible {
   color: #ffffff;
-  background: #0c2a54;
+  background: #12448b;
   box-shadow: 0 16px 30px rgba(12, 42, 84, 0.2);
   outline: none;
   transform: translateY(-2px);
@@ -101,19 +101,24 @@
 }
 
 .visual {
-  min-height: 420px;
+  min-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px;
+  padding: 12px;
   border-radius: 8px;
 }
 
 .visual img {
-  width: min(100%, 730px);
+  width: min(112%, 860px);
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 24px 28px rgba(12, 42, 84, 0.18));
+}
+.visual img:hover {
+  transform: translateY(-8px) scale(1.02);
+  transition: filter 0.1s ease, transform 0.1s ease;
+  filter: drop-shadow(0 28px 60px #12448b) drop-shadow(0 10px 30px rgba(8, 8, 87, 0.5));
+  
 }
 
 @media (max-width: 860px) {
@@ -147,9 +152,10 @@
   }
 
   .visual img {
-    width: min(100%, 520px);
-    max-height: 34vh;
+    width: min(110%, 600px);
+    max-height: 38vh;
   }
+
 }
 
 @media (max-width: 520px) {
@@ -196,4 +202,5 @@
     max-height: 28vh;
     transform: translateY(-14px);
   }
+
 }

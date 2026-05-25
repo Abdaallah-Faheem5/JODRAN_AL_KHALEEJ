@@ -3,26 +3,30 @@ import {
   FaMapMarkerAlt,
   FaPhoneAlt,
 } from 'react-icons/fa';
-import logo from '../../assets/icons/Logo2.png';
+import logo from '../../assets/icons/logo2.png';
 import styles from './footer.module.css';
 
 const quickLinks = [
   { label: 'Home', href: '/' },
   { label: 'Projects', href: '/projects' },
-  { label: 'Leadership', href: '/#leadership' },
-  { label: 'Services', href: '/#services' },
+  { label: 'Leadership', href: '/leadership' },
+  { label: 'Services', href: '/service' },
 ];
 
 const companyLinks = [
-  { label: 'Clients', href: '/#client' },
-  { label: 'Equipment', href: '/#equipment' },
-  { label: 'Documents', href: '/#documents' },
+  { label: 'Clients', href: '/client' },
+  { label: 'Equipment', href: '/equipment' },
+  { label: 'Documents', href: '/documents' },
   { label: 'About', href: '/#about' },
 ];
 
 const Footer = () => {
   const year = new Date().getFullYear();
-  const topHref = window.location.pathname === '/projects' ? '#projects' : '#home';
+  const topHref = window.location.pathname === '/projects'
+    ? '#projects'
+    : window.location.pathname === '/client'
+      ? '#client'
+      : '#home';
 
   return (
     <footer className={styles.footer}>

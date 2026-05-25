@@ -7,7 +7,7 @@ const Hero = () => {
       <div className={styles.content}>
         <p className={styles.eyebrow}>Contracting & Construction</p>
         <h1>
-          <span className={styles.highlight}>JODRAN</span> AL KHALEEJ
+          <span className={styles.highlight}>JODRAN</span><br /> AL KHALEEJ
         </h1>
         <p className={styles.description}>
           Building reliable contracting solutions across Saudi Arabia with precision,

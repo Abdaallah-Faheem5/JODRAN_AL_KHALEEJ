@@ -4,8 +4,11 @@ import {
   FaUserTie,
 } from 'react-icons/fa';
 import ProjectSphere from '../../components/ProjectSphere/ProjectSphere';
+import clients from '../../data/clients';
 import projects from '../../data/projects';
 import styles from './Projects.module.css';
+
+const getClient = (clientName) => clients.find((client) => client.name === clientName);
 
 const Projects = () => {
   return (
@@ -16,11 +19,12 @@ const Projects = () => {
         </div>
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>Projects</p>
-          <h1>Selected contracting work across Saudi Arabia.</h1>
+          <h1>
+            <span className={styles.accent}>Projects</span> delivered with precision.
+          </h1>
           <p>
-            Jodran Al Khaleej supports industrial, commercial, infrastructure,
-            and maintenance projects with disciplined execution and reliable site
-            teams.
+            Industrial, commercial, infrastructure, and maintenance work by
+            Jodran Al Khaleej teams.
           </p>
         </div>
       </section>
@@ -32,40 +36,49 @@ const Projects = () => {
         </div>
 
         <div className={styles.grid}>
-          {projects.map((project) => (
-            <article className={styles.card} key={project.id}>
-              <project.icon className={styles.cardIcon} aria-hidden="true" />
-              <div className={styles.cardBody}>
-                <span className={styles.category}>{project.department}</span>
-                <h3>{project.project}</h3>
-                <p>{project.scope}</p>
-                <dl className={styles.details}>
-                  <div>
-                    <dt>Client</dt>
-                    <dd>{project.client}</dd>
+          {projects.map((project) => {
+            const client = getClient(project.client);
+            const clientHref = client ? `/client/${client.id}` : '/client';
+
+            return (
+              <article className={styles.card} key={project.id}>
+                <project.icon className={styles.cardIcon} aria-hidden="true" />
+                <div className={styles.cardBody}>
+                  <span className={styles.category}>{project.department}</span>
+                  <h3>{project.project}</h3>
+                  <p>{project.scope}</p>
+                  <dl className={styles.details}>
+                    <div>
+                      <dt>Client</dt>
+                      <dd>
+                        <a className={styles.clientLink} href={clientHref}>
+                          {project.client}
+                        </a>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Main Contractor</dt>
+                      <dd>{project.mainContractor}</dd>
+                    </div>
+                  </dl>
+                  <div className={styles.meta}>
+                    <span>
+                      <FaMapMarkerAlt aria-hidden="true" />
+                      {project.location}
+                    </span>
+                    <a className={styles.metaLink} href={clientHref}>
+                      <FaUserTie aria-hidden="true" />
+                      {project.client}
+                    </a>
+                    <span>
+                      <FaCalendarCheck aria-hidden="true" />
+                      Delivered by Jodran teams
+                    </span>
                   </div>
-                  <div>
-                    <dt>Main Contractor</dt>
-                    <dd>{project.mainContractor}</dd>
-                  </div>
-                </dl>
-                <div className={styles.meta}>
-                  <span>
-                    <FaMapMarkerAlt aria-hidden="true" />
-                    {project.location}
-                  </span>
-                  <span>
-                    <FaUserTie aria-hidden="true" />
-                    {project.client}
-                  </span>
-                  <span>
-                    <FaCalendarCheck aria-hidden="true" />
-                    Delivered by Jodran teams
-                  </span>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </section>
     </main>

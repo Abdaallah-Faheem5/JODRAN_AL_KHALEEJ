@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import logo from '../../assets/icons/Logo2.png';
+import logo from '../../assets/icons/logo2.png';
 import styles from './navbar.module.css';
 
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Projects', href: '/projects'},
-  { label: 'Leadership', href: '/#leadership' },
-  { label: 'Services', href: '/#services' },
-  { label: 'Client', href: '/#client' },
-  { label: 'Equipment', href: '/#equipment' },
-  { label: 'Documents', href: '/#documents' },
+  { label: 'Client', href: '/client' },
+  { label: 'Services', href: '/service' },
+  { label: 'Leadership', href: '/leadership' },
+  { label: 'Equipment', href: '/equipment' },
+  
 ];
 
 const Navbar = () => {
