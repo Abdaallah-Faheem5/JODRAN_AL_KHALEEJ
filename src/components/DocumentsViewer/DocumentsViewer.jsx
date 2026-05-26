@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 const DocumentsViewer = ({ className }) => {
   const mountRef = useRef(null);
@@ -10,8 +11,7 @@ const DocumentsViewer = ({ className }) => {
 
     if (!mount) return undefined;
 
-    const initScene = async () => {
-      const THREE = await import('three');
+    const initScene = () => {
       if (!isMounted || !mountRef.current) return;
 
       // ── Scene / Camera ─────────────────────────────────────────────────

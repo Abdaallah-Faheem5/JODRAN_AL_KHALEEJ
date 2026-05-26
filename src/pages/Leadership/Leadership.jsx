@@ -24,12 +24,7 @@ const Leadership = ({ isDedicatedPage }) => {
               Jodran Al Khaleej is directed by highly qualified engineering and project
               management professionals dedicated to maintaining standard specifications and safety controls.
             </p>
-            <div className={styles.heroActions}>
-              <Link className={styles.documentBtn} to="/documents">
-                View Corporate Documents
-                <FaArrowRight aria-hidden="true" />
-              </Link>
-            </div>
+            
           </div>
         </section>
       )}

@@ -342,9 +342,9 @@
 
   /* Hide heavy 3D canvas on phones — too small to appreciate */
   .heroSphereWrap {
-    right: -30px;
-    bottom: 1vh;
-    width: 200px;
+    right: -70px;
+    bottom: -5vh;
+    width: 280px;
     opacity: 0.4;
   }
 }
@@ -373,4 +373,13 @@
   .heroDescription {
     font-size: 0.95rem;
   }
+}
+.heroSphereWrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }

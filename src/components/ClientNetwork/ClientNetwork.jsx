@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 const ClientNetwork = ({ className }) => {
   const mountRef = useRef(null);
@@ -12,9 +13,7 @@ const ClientNetwork = ({ className }) => {
       return undefined;
     }
 
-    const initScene = async () => {
-      const THREE = await import('three');
-
+    const initScene = () => {
       if (!isMounted || !mountRef.current) {
         return;
       }

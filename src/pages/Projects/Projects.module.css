@@ -19,7 +19,12 @@
   align-items: center;
   overflow: hidden;
   background:
-    linear-gradient(90deg, rgba(11, 50, 108, 0.96), rgba(19, 66, 132, 0.82) 58%, rgba(14, 50, 100, 0.68)),
+    linear-gradient(
+      90deg,
+      rgba(11, 50, 108, 0.96),
+      rgba(19, 66, 132, 0.82) 58%,
+      rgba(14, 50, 100, 0.68)
+    ),
     linear-gradient(135deg, #071b3d 0%, #0c2a54 46%, #174f8f 100%);
 }
 
@@ -314,10 +319,10 @@
   }
 
   .heroSphereWrap {
-    right: 50px;
-    bottom: 15vh;
-    width: 150px;
-    opacity: 0.4;
+    right: 10px;
+    bottom: 2vh;
+    width: 250px;
+    opacity: 0.8;
   }
 
   .projectSection {
@@ -344,4 +349,13 @@
     min-height: 0;
     padding: 22px;
   }
+}
+.heroSphereWrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }

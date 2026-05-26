@@ -37,8 +37,8 @@
 
 .heroSphereWrap {
   position: absolute;
-  right: max(28px, 7vw);
-  bottom: 4vh;
+  right: 50px;
+  bottom: -15vh;
   width: min(560px, 44vw);
   aspect-ratio: 1.18;
   z-index: 0;
@@ -325,9 +325,9 @@
 
   .heroSphereWrap {
     right: -30px;
-    bottom: 1vh;
+    bottom: -15vh;
     width: 330px;
-    opacity: 0.4;
+    opacity: 0.8;
   }
 }
 
@@ -347,4 +347,13 @@
     width: min(100% - 24px, 1180px);
     padding: 200px 0 ;
   }
+}
+.heroSphereWrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }
