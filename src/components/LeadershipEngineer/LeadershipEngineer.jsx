@@ -195,7 +195,7 @@ const LeadershipEngineer = ({ className }) => {
       // ── Company logo screen ────────────────────────────────────────────
 const textureLoader = new THREE.TextureLoader();
 
-const logoTexture = textureLoader.load('./src/assets/icons/logo1.png');
+const logoTexture = textureLoader.load('./assets/icons/logo1.png');
 
 logoTexture.colorSpace = THREE.SRGBColorSpace;
 logoTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
