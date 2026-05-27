@@ -31,17 +31,17 @@ const DocumentsViewer = ({ className }) => {
 
       // ── Materials ───────────────────────────────────────────────────────
       const folderOrange = new THREE.MeshStandardMaterial({
-        color: 0xe8750a,
+        color: 0x1a1a1a,
         roughness: 0.55,
         metalness: 0.04,
       });
       const folderOrangeDark = new THREE.MeshStandardMaterial({
-        color: 0xbf5c04,
+        color: 0x111111,
         roughness: 0.6,
         metalness: 0.04,
       });
       const folderOrangeLight = new THREE.MeshStandardMaterial({
-        color: 0xf58c22,
+        color: 0x111111,
         roughness: 0.5,
         metalness: 0.03,
       });
@@ -173,15 +173,7 @@ const DocumentsViewer = ({ className }) => {
       folder.add(frontCover);
 
       // Front cover — vertical rib lines (texture)
-      for (let ri = -4; ri <= 4; ri++) {
-        const rib = new THREE.Mesh(
-          new THREE.BoxGeometry(0.008, 0.88, 0.03),
-          folderOrangeLight,
-        );
-        rib.position.set(ri * 0.128, 0, 0.073);
-        folder.add(rib);
-      }
-
+      
       // ── TAB (upper-left) ──────────────────────────────────────────────
       const tab = new THREE.Mesh(
         new THREE.BoxGeometry(0.28, 0.095, 0.03),
@@ -263,21 +255,14 @@ const DocumentsViewer = ({ className }) => {
 
       // Fastener bridge
       const bridge = new THREE.Mesh(
-        new THREE.BoxGeometry(0.06, 0.22, 0.016),
+        new THREE.BoxGeometry(0.07, 0.22, 0.026),
         brass,
       );
       bridge.position.set(0, 0, 0.075);
       folder.add(bridge);
 
       // ── CORNER PROTECTORS (4 brass corners) ────────────────────────────
-      [[-0.57, -0.43], [0.57, -0.43], [-0.57, 0.43], [0.57, 0.43]].forEach(([cx, cy]) => {
-        const corner = new THREE.Mesh(
-          new THREE.BoxGeometry(0.08, 0.08, 0.04),
-          brass,
-        );
-        corner.position.set(cx, cy, 0.074);
-        folder.add(corner);
-      });
+      
 
       // ═══════════════════════════════════════════════════════════════════
       // DOCUMENT STICKING OUT (rear right, slightly raised)

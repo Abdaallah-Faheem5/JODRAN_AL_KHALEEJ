@@ -273,43 +273,43 @@ const EquipmentBulldozer = ({ className }) => {
       dozer.add(cabinGroup);
 
       // Cabin floor plate
-      const cabinFloor = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.06, 0.72), catYellowDark);
-      cabinFloor.position.set(0, 0.5, 0);
+      const cabinFloor = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.65, 0.72), catYellowDark);
+      cabinFloor.position.set(0, 0.55, 0);
       cabinGroup.add(cabinFloor);
 
       // Cabin walls (glass panels) — front, rear, sides
-      const panelFront = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.58, 0.04), glassMat);
-      panelFront.position.set(0, 0.82, 0.36);
+      const panelFront = new THREE.Mesh(new THREE.BoxGeometry(0.82, 1.0, 0.04), glassMat);
+      panelFront.position.set(0, 1.0, 0.36);
       panelFront.castShadow = true;
       cabinGroup.add(panelFront);
 
-      const panelRear = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.52, 0.04), glassMat);
-      panelRear.position.set(0, 0.82, -0.36);
+      const panelRear = new THREE.Mesh(new THREE.BoxGeometry(0.82, 1.0, 0.04), glassMat);
+      panelRear.position.set(0, 1.0, -0.36);
       cabinGroup.add(panelRear);
 
-      const panelLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.58, 0.72), glassMat);
-      panelLeft.position.set(-0.41, 0.82, 0);
+      const panelLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.0, 0.72), glassMat);
+      panelLeft.position.set(-0.41, 1.0, 0);
       cabinGroup.add(panelLeft);
 
-      const panelRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.58, 0.72), glassMat);
-      panelRight.position.set(0.41, 0.82, 0);
+      const panelRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.0, 0.72), glassMat);
+      panelRight.position.set(0.41, 1.0, 0);
       cabinGroup.add(panelRight);
 
       // Roof
       const roof = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.055, 0.78), catYellow);
-      roof.position.set(0, 1.115, 0);
+      roof.position.set(0, 1.5, 0);
       roof.castShadow = true;
       cabinGroup.add(roof);
 
       // Roof lip overhang
       const roofLip = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.028, 0.82), catYellowDark);
-      roofLip.position.set(0, 1.09, 0);
+      roofLip.position.set(0, 1.45, 0);
       cabinGroup.add(roofLip);
 
       // ROPS pillars (4 corner structural bars)
       [[-0.38, 0.34], [0.38, 0.34], [-0.38, -0.34], [0.38, -0.34]].forEach(([px, pz]) => {
-        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.62, 0.04), catYellowDark);
-        pillar.position.set(px, 0.82, pz);
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.0, 0.04), catYellowDark);
+        pillar.position.set(px, 1.0, pz);
         pillar.castShadow = true;
         cabinGroup.add(pillar);
 
@@ -317,40 +317,40 @@ const EquipmentBulldozer = ({ className }) => {
 
       // Interior: seat
       const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.06, 0.24), seatMat);
-      seatCushion.position.set(0, 0.62, -0.04);
+      seatCushion.position.set(0, 0.9, -0.04);
       cabinGroup.add(seatCushion);
 
       const seatBack = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.3, 0.05), seatMat);
-      seatBack.position.set(0, 0.77, -0.16);
+      seatBack.position.set(0, 1.0, -0.16);
       seatBack.rotation.x = 0.1;
       cabinGroup.add(seatBack);
 
       // Armrests
       [-0.14, 0.14].forEach(ax => {
         const arm = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.04, 0.22), darkSteel);
-        arm.position.set(ax, 0.66, -0.05);
+        arm.position.set(ax, 0.96, -0.05);
         cabinGroup.add(arm);
       });
 
       // Steering column & wheel
       const column = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.22, 8), darkSteel);
-      column.position.set(0, 0.64, 0.16);
+      column.position.set(0, 0.99, 0.16);
       column.rotation.x = 0.45;
       cabinGroup.add(column);
 
       const steerHub = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.025, 8), darkSteel);
       steerHub.rotation.x = Math.PI / 2 + 0.45;
-      steerHub.position.set(0, 0.74, 0.25);
+      steerHub.position.set(0, 0.99, 0.25);
       cabinGroup.add(steerHub);
 
       const steerWheel = new THREE.Mesh(new THREE.TorusGeometry(0.085, 0.014, 8, 24), darkSteel);
       steerWheel.rotation.x = Math.PI / 2 + 0.45;
-      steerWheel.position.set(0, 0.74, 0.25);
+      steerWheel.position.set(0, 0.99, 0.25);
       cabinGroup.add(steerWheel);
 
       // Dashboard / instrument panel
       const dash = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.12, 0.06), darkSteel);
-      dash.position.set(0, 0.64, 0.3);
+      dash.position.set(0, 0.99, 0.3);
       dash.rotation.x = -0.3;
       cabinGroup.add(dash);
 
@@ -358,7 +358,7 @@ const EquipmentBulldozer = ({ className }) => {
       for (let gi = 0; gi < 3; gi++) {
         const gx = -0.18 + gi * 0.18;
         const gauge = new THREE.Mesh(new THREE.CircleGeometry(0.03, 12), grilleMat);
-        gauge.position.set(gx, 0.68, 0.33);
+        gauge.position.set(gx, 0.99, 0.33);
         gauge.rotation.x = -0.3;
         cabinGroup.add(gauge);
       }
