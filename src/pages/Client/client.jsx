@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useMemo, useEffect } from 'react';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import {
   FaArrowRight,
   FaCalendarCheck,
@@ -15,7 +15,12 @@ import ClientNetwork from '../../components/ClientPerson/ClientPerson';
 
 const Client = () => {
   const { id: clientIdFromPath } = useParams();
+  const location = useLocation();
   const isDetailPage = Boolean(clientIdFromPath);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const selectedClient = useMemo(
     () => clients.find((client) => client.id === clientIdFromPath),

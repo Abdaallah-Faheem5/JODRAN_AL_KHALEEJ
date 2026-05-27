@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import {
   FaCalendarCheck,
   FaMapMarkerAlt,
@@ -11,7 +12,20 @@ import styles from './Projects.module.css';
 
 const getClient = (clientName) => clients.find((client) => client.name === clientName);
 
+const PROJECTS_PER_PAGE = 9;
+
 const Projects = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
+  const endIndex = startIndex + PROJECTS_PER_PAGE;
+  const currentProjects = projects.slice(startIndex, endIndex);
+
   return (
     <main className={styles.projectsPage}>
       <section className={styles.hero} id="projects">
@@ -37,7 +51,7 @@ const Projects = () => {
         </div>
 
         <div className={styles.grid}>
-          {projects.map((project) => {
+          {currentProjects.map((project) => {
             const client = getClient(project.client);
             const clientHref = client ? `/client/${client.id}` : '/client';
 
@@ -49,14 +63,7 @@ const Projects = () => {
                   <h3>{project.project}</h3>
                   <p>{project.scope}</p>
                   <dl className={styles.details}>
-                    <div>
-                      <dt>Client</dt>
-                      <dd>
-                        <Link className={styles.clientLink} to={clientHref}>
-                          {project.client}
-                        </Link>
-                      </dd>
-                    </div>
+                    
                     <div>
                       <dt>Main Contractor</dt>
                       <dd>{project.mainContractor}</dd>
@@ -81,6 +88,38 @@ const Projects = () => {
             );
           })}
         </div>
+
+        {totalPages > 1 && (
+          <div className={styles.pagination}>
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className={styles.paginationBtn}
+            >
+              Previous
+            </button>
+            
+            <div className={styles.pageNumbers}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`${styles.pageNumber} ${currentPage === page ? styles.active : ''}`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className={styles.paginationBtn}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </section>
     </main>
   );

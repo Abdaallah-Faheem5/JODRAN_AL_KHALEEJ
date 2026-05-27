@@ -9,6 +9,7 @@ const Home = () => {
     const location = useLocation();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (location.hash === '#about') {
             const element = document.getElementById('about');
             if (element) {
@@ -16,6 +17,7 @@ const Home = () => {
             }
         }
     }, [location]);
+    
 
     return (
         <main className={style.home}>

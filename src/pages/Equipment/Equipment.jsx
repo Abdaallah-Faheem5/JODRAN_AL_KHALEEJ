@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import equipment from '../../data/equipment';
 import styles from './Equipment.module.css';
@@ -8,6 +8,10 @@ const Equipment = ({ isDedicatedPage }) => {
   const location = useLocation();
   const showHero = isDedicatedPage !== undefined ? isDedicatedPage : location.pathname === '/equipment';
   const [activeCategory, setActiveCategory] = useState('All');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   // Extract unique categories
   const categories = useMemo(() => {

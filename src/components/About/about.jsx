@@ -24,6 +24,7 @@ const highlights = [
   },
 ];
 
+
 const About = () => {
   return (
     <section className={styles.about} id="about">

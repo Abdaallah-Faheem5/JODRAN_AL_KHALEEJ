@@ -17,269 +17,243 @@ const LeadershipEngineer = ({ className }) => {
       // ── Scene / Camera ─────────────────────────────────────────────────
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-      camera.position.set(0, 0.55, 3.8);
-      camera.lookAt(0, 0.15, 0);
+      camera.position.set(0, 1.0, 5.6);
+      camera.lookAt(0, 0.45, 0);
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+      const renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+      });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setClearColor(0x000000, 0);
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.2;
+      renderer.toneMappingExposure = 1.1;
       mount.appendChild(renderer.domElement);
 
       // ── Materials ───────────────────────────────────────────────────────
-      const helmetYellow = new THREE.MeshStandardMaterial({
-        color: 0xf5c518,
-        roughness: 0.16,
-        metalness: 0.14,
+      const tableMat = new THREE.MeshStandardMaterial({
+        color: 0x4b2e1f,
+        roughness: 0.55,
+        metalness: 0.15,
       });
-      const helmetUnder = new THREE.MeshStandardMaterial({
-        color: 0xd4a810,
-        roughness: 0.24,
-        metalness: 0.1,
+
+      const darkMat = new THREE.MeshStandardMaterial({
+        color: 0x161616,
+        roughness: 0.7,
+        metalness: 0.2,
       });
-      const brimMat = new THREE.MeshStandardMaterial({
-        color: 0xe0ad10,
+
+      const metalMat = new THREE.MeshStandardMaterial({
+        color: 0xbec5cc,
         roughness: 0.2,
+        metalness: 1,
+      });
+
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0x6ea8ff,
+        transmission: 0.9,
+        transparent: true,
+        opacity: 0.45,
+        roughness: 0.05,
+        metalness: 0.1,
+        clearcoat: 1,
+      });
+
+      const screenMat = new THREE.MeshStandardMaterial({
+        color: 0x1f4d88,
+        emissive: 0x3b82f6,
+        emissiveIntensity: 1.5,
+      });
+
+      const chairMat = new THREE.MeshStandardMaterial({
+        color: 0x202020,
+        roughness: 0.78,
         metalness: 0.12,
       });
-      const suspensionMat = new THREE.MeshStandardMaterial({
-        color: 0x1a1a1a,
-        roughness: 0.7,
-        metalness: 0.1,
-      });
-      const strapMat = new THREE.MeshStandardMaterial({
-        color: 0x2a1a0a,
-        roughness: 0.82,
-        metalness: 0.0,
-      });
-      const logoMat = new THREE.MeshStandardMaterial({
-        color: 0xff6600,
-        roughness: 0.38,
-        metalness: 0.05,
-        emissive: 0x441100,
-        emissiveIntensity: 0.4,
-      });
-      const reflectiveMat = new THREE.MeshStandardMaterial({
-        color: 0xe8e8e8,
-        roughness: 0.08,
-        metalness: 0.96,
-        emissive: 0x333333,
-        emissiveIntensity: 0.3,
-      });
-      const gridMat = new THREE.LineBasicMaterial({
+
+      const accentMat = new THREE.MeshStandardMaterial({
         color: 0xf5c518,
+        roughness: 0.32,
+        metalness: 0.35,
+      });
+
+      const gridMat = new THREE.LineBasicMaterial({
+        color: 0x9ca3af,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.08,
       });
 
       // ── Model group ─────────────────────────────────────────────────────
       const model = new THREE.Group();
       scene.add(model);
 
-      const hat = new THREE.Group();
-      hat.position.y = 0.08;
-      model.add(hat);
+      const boardroom = new THREE.Group();
+      boardroom.position.y = -0.2;
+      model.add(boardroom);
 
-      // ── DOME — layered shells for thickness ─────────────────────────────
-      // Outer dome shell (full upper hemisphere)
-      const outerDome = new THREE.Mesh(
-        new THREE.SphereGeometry(0.72, 48, 32, 0, Math.PI * 2, 0, Math.PI * 0.52),
-        helmetYellow,
+      // ── Rectangular conference table ───────────────────────────────────
+      const table = new THREE.Mesh(
+        new THREE.BoxGeometry(4.2, 0.14, 1.8),
+        tableMat,
       );
-      outerDome.castShadow = true;
-      hat.add(outerDome);
 
-      // Slight crown flat-top bulge (characteristic of hard hats)
-      const crownBulge = new THREE.Mesh(
-        new THREE.SphereGeometry(0.68, 32, 20, 0, Math.PI * 2, 0, Math.PI * 0.22),
-        helmetYellow,
+      table.position.y = 0.35;
+      table.castShadow = true;
+      table.receiveShadow = true;
+      boardroom.add(table);
+
+      // Gold edge lines
+      const edge1 = new THREE.Mesh(
+        new THREE.BoxGeometry(4.25, 0.015, 0.03),
+        accentMat,
       );
-      crownBulge.position.y = 0.52;
-      crownBulge.scale.set(1, 0.32, 1);
-      hat.add(crownBulge);
+      edge1.position.set(0, 0.43, 0.9);
+      boardroom.add(edge1);
 
-      // Inner shell (slightly smaller, darker — visible at brim edge)
-      const innerDome = new THREE.Mesh(
-        new THREE.SphereGeometry(0.67, 40, 28, 0, Math.PI * 2, 0, Math.PI * 0.52),
-        helmetUnder,
+      const edge2 = edge1.clone();
+      edge2.position.z = -0.9;
+      boardroom.add(edge2);
+
+      const edge3 = new THREE.Mesh(
+        new THREE.BoxGeometry(0.03, 0.015, 1.85),
+        accentMat,
       );
-      innerDome.receiveShadow = true;
-      hat.add(innerDome);
+      edge3.position.set(2.1, 0.43, 0);
+      boardroom.add(edge3);
 
-      // ── BRIM ─────────────────────────────────────────────────────────────
-      // Full wrap-around brim (flat torus-cap shape)
-      const brimOuter = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.86, 0.82, 0.06, 48),
-        brimMat,
-      );
-      brimOuter.position.y = -0.12;
-      brimOuter.castShadow = true;
-      hat.add(brimOuter);
+      const edge4 = edge3.clone();
+      edge4.position.x = -2.1;
+      boardroom.add(edge4);
 
-      // Brim underside
-      const brimUnder = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.82, 0.78, 0.03, 48),
-        helmetUnder,
-      );
-      brimUnder.position.y = -0.155;
-      hat.add(brimUnder);
+      // ── Chairs ──────────────────────────────────────────────────────────
+      const chairPositions = [
+        [-2.6, 0, -0.8],
+        [-1.3, 0, -0.8],
+        [0, 0, -0.8],
+        [1.3, 0, -0.8],
+        [2.6, 0, -0.8],
 
-      // Front peak extension (longer than rear)
-      const frontPeak = new THREE.Mesh(
-        new THREE.BoxGeometry(0.48, 0.045, 0.22),
-        brimMat,
-      );
-      frontPeak.position.set(0, -0.12, 0.9);
-      frontPeak.rotation.x = 0.12;
-      frontPeak.castShadow = true;
-      hat.add(frontPeak);
-
-      // Peak underside
-      const frontPeakUnder = new THREE.Mesh(
-        new THREE.BoxGeometry(0.46, 0.025, 0.2),
-        helmetUnder,
-      );
-      frontPeakUnder.position.set(0, -0.148, 0.9);
-      frontPeakUnder.rotation.x = 0.12;
-      hat.add(frontPeakUnder);
-
-      // ── SUSPENSION RIDGE ─────────────────────────────────────────────────
-      const ridge = new THREE.Mesh(
-        new THREE.TorusGeometry(0.7, 0.028, 10, 52),
-        reflectiveMat,
-      );
-      ridge.rotation.x = Math.PI / 2;
-      ridge.position.y = -0.06;
-      hat.add(ridge);
-
-      // ── VENTILATION SLOTS ─────────────────────────────────────────────────
-      // Two vent slots on each side (4 total)
-      const ventSlots = [
-        { x: 0.58, z: 0.28, ry: -0.42 },
-        { x: 0.58, z: -0.28, ry: -0.22 },
-        { x: -0.58, z: 0.28, ry: 0.42 },
-        { x: -0.58, z: -0.28, ry: 0.22 },
+        [-2.6, 0, 0.8],
+        [-1.3, 0, 0.8],
+        [0, 0, 0.8],
+        [1.3, 0, 0.8],
+        [2.6, 0, 0.8],
       ];
-      ventSlots.forEach(({ x, z, ry }) => {
-        const slot = new THREE.Mesh(
-          new THREE.BoxGeometry(0.08, 0.028, 0.13),
-          new THREE.MeshStandardMaterial({ color: 0xb89000, roughness: 0.4 }),
+
+      chairPositions.forEach(([x, y, z]) => {
+        const chair = new THREE.Group();
+
+        const seat = new THREE.Mesh(
+          new THREE.BoxGeometry(0.38, 0.08, 0.38),
+          chairMat,
         );
-        slot.position.set(x, 0.28, z);
-        slot.rotation.y = ry;
-        hat.add(slot);
+
+        seat.position.y = 0.05;
+        seat.castShadow = true;
+        chair.add(seat);
+
+        const back = new THREE.Mesh(
+          new THREE.BoxGeometry(0.38, 0.5, 0.08),
+          chairMat,
+        );
+
+        back.position.set(0, 0.32, z > 0 ? -0.15 : 0.15);
+        back.castShadow = true;
+        chair.add(back);
+
+        const leg = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.03, 0.03, 0.34, 12),
+          metalMat,
+        );
+
+        leg.position.y = -0.12;
+        leg.castShadow = true;
+        chair.add(leg);
+
+        chair.position.set(x, y, z);
+
+        if (z > 0) {
+          chair.rotation.y = Math.PI;
+        }
+
+        boardroom.add(chair);
       });
 
-      // ── LOGO / BADGE (front face) ─────────────────────────────────────────
-      const logoPlate = new THREE.Mesh(
-        new THREE.BoxGeometry(0.22, 0.12, 0.015),
-        logoMat,
-      );
-      logoPlate.position.set(0, 0.1, 0.72);
-      logoPlate.rotation.x = -0.35;
-      hat.add(logoPlate);
 
-      // Logo border (silver)
-      const logoBorder = new THREE.Mesh(
-        new THREE.BoxGeometry(0.24, 0.14, 0.01),
-        reflectiveMat,
+      // ── Subtle monitor wall behind ──────────────────────────────────────
+      const wallPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(2.2, 1.1, 0.06),
+        darkMat,
       );
-      logoBorder.position.set(0, 0.1, 0.714);
-      logoBorder.rotation.x = -0.35;
-      hat.add(logoBorder);
+      wallPanel.position.set(0, 1.55, -1.45);
+      wallPanel.castShadow = true;
+      boardroom.add(wallPanel);
 
-      // ── HEADBAND / SUSPENSION INTERIOR ─────────────────────────────────
-      // Internal headband ring (visible from below)
-      const headband = new THREE.Mesh(
-        new THREE.TorusGeometry(0.5, 0.04, 10, 40),
-        suspensionMat,
-      );
-      headband.rotation.x = Math.PI / 2;
-      headband.position.y = -0.05;
-      hat.add(headband);
+      // ── Company logo screen ────────────────────────────────────────────
+const textureLoader = new THREE.TextureLoader();
 
-      // 6-point suspension webbing
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2;
-        const web = new THREE.Mesh(
-          new THREE.BoxGeometry(0.014, 0.28, 0.014),
-          suspensionMat,
+const logoTexture = textureLoader.load('./src/assets/icons/logo1.png');
+
+logoTexture.colorSpace = THREE.SRGBColorSpace;
+logoTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+// Thin elegant frame
+const screenFrame = new THREE.Mesh(
+  new THREE.BoxGeometry(2.42, 1.12, 0.035),
+  new THREE.MeshStandardMaterial({
+    color: 0x1a1a1a,
+    roughness: 0.4,
+    metalness: 0.75,
+  }),
+);
+
+screenFrame.position.set(0, 1.55, -1.43);
+
+boardroom.add(screenFrame);
+
+// Logo screen
+const wallScreen = new THREE.Mesh(
+  new THREE.PlaneGeometry(2.28, 1.0),
+  new THREE.MeshStandardMaterial({
+    map: logoTexture,
+
+    emissive: 0xffffff,
+    emissiveMap: logoTexture,
+    emissiveIntensity: 0.22,
+
+    roughness: 0.18,
+    metalness: 0.05,
+  }),
+);
+
+wallScreen.position.set(0, 1.55, -1.405);
+
+boardroom.add(wallScreen);
+      // ── Table papers / tablets ─────────────────────────────────────────
+      for (let i = 0; i < 4; i++) {
+        const paper = new THREE.Mesh(
+          new THREE.BoxGeometry(0.32, 0.01, 0.22),
+          new THREE.MeshStandardMaterial({
+            color: 0xf2f0e8,
+            roughness: 0.95,
+            metalness: 0,
+          }),
         );
-        web.position.set(Math.sin(angle) * 0.38, 0.06, Math.cos(angle) * 0.38);
-        web.rotation.z = -angle + Math.PI / 2;
-        web.rotation.y = angle;
-        // tilt toward center
-        const dir = new THREE.Vector3(-Math.sin(angle), 0.7, -Math.cos(angle)).normalize();
-        web.lookAt(dir);
-        hat.add(web);
+        const angle = (i / 4) * Math.PI * 2 + 0.35;
+        paper.position.set(Math.sin(angle) * 1.0, 0.49, Math.cos(angle) * 1.0);
+        paper.rotation.y = -angle + Math.PI / 2;
+        paper.rotation.z = 0.04;
+        paper.castShadow = true;
+        boardroom.add(paper);
       }
 
-      // Sweatband (chin-area padded strip)
-      const sweatband = new THREE.Mesh(
-        new THREE.TorusGeometry(0.5, 0.06, 8, 40, Math.PI * 1.6),
-        new THREE.MeshStandardMaterial({ color: 0x2a1505, roughness: 0.88 }),
-      );
-      sweatband.rotation.x = Math.PI / 2;
-      sweatband.rotation.z = Math.PI * 0.2;
-      sweatband.position.y = -0.08;
-      sweatband.scale.set(1, 0.5, 1);
-      hat.add(sweatband);
+      // ── Lighting ───────────────────────────────────────────────────────
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x0a1628, 1.45));
 
-      // ── CHIN STRAP ───────────────────────────────────────────────────────
-      // Chin strap D-rings on each side
-      [-0.65, 0.65].forEach(sx => {
-        const dRing = new THREE.Mesh(
-          new THREE.TorusGeometry(0.055, 0.012, 8, 20),
-          reflectiveMat,
-        );
-        dRing.position.set(sx, -0.18, 0.3);
-        dRing.rotation.y = sx > 0 ? -Math.PI / 3 : Math.PI / 3;
-        hat.add(dRing);
-
-        const strap = new THREE.Mesh(
-          new THREE.BoxGeometry(0.03, 0.012, 0.38),
-          strapMat,
-        );
-        strap.position.set(sx * 0.72, -0.22, 0.12);
-        strap.rotation.y = sx > 0 ? 0.3 : -0.3;
-        hat.add(strap);
-      });
-
-      // ── REFLECTIVE STRIPS ────────────────────────────────────────────────
-      // Front & back reflective sticker strips
-      [{ z: 0.68, ry: 0 }, { z: -0.68, ry: Math.PI }].forEach(({ z, ry }) => {
-        const strip = new THREE.Mesh(
-          new THREE.BoxGeometry(0.44, 0.032, 0.016),
-          reflectiveMat,
-        );
-        strip.position.set(0, -0.0, z);
-        strip.rotation.y = ry;
-        strip.rotation.x = ry === 0 ? -0.28 : 0.28;
-        hat.add(strip);
-      });
-
-      // ── GROUND SHADOW & GRID ──────────────────────────────────────────────
-      const shadowPlane = new THREE.Mesh(
-        new THREE.PlaneGeometry(6, 6),
-        new THREE.ShadowMaterial({ opacity: 0.4 }),
-      );
-      shadowPlane.rotation.x = -Math.PI / 2;
-      shadowPlane.position.y = -0.72;
-      shadowPlane.receiveShadow = true;
-      model.add(shadowPlane);
-
-      const grid = new THREE.GridHelper(4.5, 14, 0xf5c518, 0x1e293b);
-      grid.position.y = -0.72;
-      grid.material = gridMat;
-      model.add(grid);
-
-      // ── LIGHTING ──────────────────────────────────────────────────────────
-      scene.add(new THREE.HemisphereLight(0xfff8e0, 0x0a1628, 1.6));
-
-      const key = new THREE.DirectionalLight(0xfff8e0, 6.5);
+      const key = new THREE.DirectionalLight(0xfff4dc, 6.0);
       key.position.set(-3, 5, 4);
       key.castShadow = true;
       key.shadow.mapSize.set(2048, 2048);
@@ -292,23 +266,36 @@ const LeadershipEngineer = ({ className }) => {
       key.shadow.bias = -0.001;
       scene.add(key);
 
-      // Right fill (warm)
-      const fill = new THREE.DirectionalLight(0xffd080, 2.5);
+      const fill = new THREE.DirectionalLight(0xc9ddff, 2.2);
       fill.position.set(4, 2, 2);
       scene.add(fill);
 
-      // Rim / back (cool blue)
-      const rim = new THREE.DirectionalLight(0x88aaff, 1.8);
+      const rim = new THREE.DirectionalLight(0x7aa6ff, 1.4);
       rim.position.set(0, 1.5, -4);
       scene.add(rim);
 
-      // Under bounce (warm ground)
-      const ground = new THREE.PointLight(0xf5c518, 2.2, 5);
-      ground.position.set(0, -0.5, 1.5);
+      const ground = new THREE.PointLight(0xf5c518, 1.6, 6);
+      ground.position.set(0, -0.45, 1.4);
       scene.add(ground);
 
-      // ── Resize ────────────────────────────────────────────────────────────
-      let frameId = 0, resizeFrameId = 0;
+      // ── Ground shadow & grid ───────────────────────────────────────────
+      const shadowPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(8, 8),
+        new THREE.ShadowMaterial({ opacity: 0.35 }),
+      );
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.position.y = -0.78;
+      shadowPlane.receiveShadow = true;
+      model.add(shadowPlane);
+
+      const grid = new THREE.GridHelper(5, 16, 0x9ca3af, 0x1e293b);
+      grid.position.y = -0.78;
+      grid.material = gridMat;
+      model.add(grid);
+
+      // ── Resize ─────────────────────────────────────────────────────────
+      let frameId = 0;
+      let resizeFrameId = 0;
       const startTime = performance.now();
 
       const applyResize = () => {
@@ -319,47 +306,62 @@ const LeadershipEngineer = ({ className }) => {
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
       };
-      const resize = () => { cancelAnimationFrame(resizeFrameId); resizeFrameId = requestAnimationFrame(applyResize); };
+
+      const resize = () => {
+        cancelAnimationFrame(resizeFrameId);
+        resizeFrameId = requestAnimationFrame(applyResize);
+      };
+
       const resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(mount);
       applyResize();
 
-      // ── Animation ─────────────────────────────────────────────────────────
+      // ── Animation ─────────────────────────────────────────────────────
       const render = () => {
         const t = (performance.now() - startTime) / 1000;
 
-        // Gentle float
-        hat.position.y = 0.08 + Math.sin(t * 1.3) * 0.04;
+        boardroom.position.y = -0.2 + Math.sin(t * 1.1) * 0.03;
+        model.rotation.y = Math.sin(t * 0.25) * 0.35;
 
-        // Very slow proud showcase rotation
-        model.rotation.y = Math.sin(t * 0.3) * 0.65;
 
-        // Subtle tilt (breathing feel)
-        hat.rotation.z = Math.sin(t * 0.8) * 0.03;
-        hat.rotation.x = Math.sin(t * 0.6) * 0.025;
+
+        boardroom.rotation.z = Math.sin(t * 0.6) * 0.01;
+        boardroom.rotation.x = Math.sin(t * 0.45) * 0.008;
 
         renderer.render(scene, camera);
         frameId = requestAnimationFrame(render);
       };
+
       render();
 
       cleanupScene = () => {
         cancelAnimationFrame(frameId);
         cancelAnimationFrame(resizeFrameId);
         resizeObserver.disconnect();
-        if (renderer.domElement.parentElement === mount) mount.removeChild(renderer.domElement);
+
+        if (renderer.domElement.parentElement === mount) {
+          mount.removeChild(renderer.domElement);
+        }
+
         scene.traverse(o => {
           if (!o.isMesh && !o.isLine) return;
           o.geometry?.dispose();
-          Array.isArray(o.material) ? o.material.forEach(m => m.dispose()) : o.material?.dispose();
+          Array.isArray(o.material)
+            ? o.material.forEach(m => m.dispose())
+            : o.material?.dispose();
         });
+
         gridMat.dispose();
         renderer.dispose();
       };
     };
 
     initScene();
-    return () => { isMounted = false; if (cleanupScene) cleanupScene(); };
+
+    return () => {
+      isMounted = false;
+      if (cleanupScene) cleanupScene();
+    };
   }, []);
 
   return <div ref={mountRef} className={className} aria-hidden="true" />;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './Documents.module.css';
 import { FaFilePdf, FaDownload, FaCheck, FaSpinner } from 'react-icons/fa';
@@ -53,6 +53,10 @@ const Documents = ({ isDedicatedPage }) => {
   const location = useLocation();
   const showHero = isDedicatedPage !== undefined ? isDedicatedPage : location.pathname === '/documents';
   const [downloadStates, setDownloadStates] = useState({});
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const handleDownload = (docId, docTitle) => {
     if (downloadStates[docId]) {

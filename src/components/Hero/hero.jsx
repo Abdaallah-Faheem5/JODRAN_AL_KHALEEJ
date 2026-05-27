@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import saudiMap from '../../assets/icons/map.png';
+import saudiMap from '../../assets/icons/map1.png';
 import styles from './hero.module.css';
 
 const Hero = () => {

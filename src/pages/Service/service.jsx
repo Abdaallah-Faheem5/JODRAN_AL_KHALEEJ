@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import services from '../../data/services';
 import styles from './service.module.css';
 import ClientNetwork from '../../components/ClientNetwork/ClientNetwork';
@@ -22,6 +23,12 @@ const serviceIcons = {
 };
 
 const Service = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <main className={styles.servicesPage}>
       <section className={styles.hero} id="services">

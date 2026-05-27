@@ -17,7 +17,7 @@ const EquipmentBulldozer = ({ className }) => {
       // ── Scene & Camera ────────────────────────────────────────────────────
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-      camera.position.set(5.2, 3.6, 7.0);
+      camera.position.set(4.1, 2.8, 5.2);
       camera.lookAt(0, 0.4, 0);
 
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
@@ -31,19 +31,41 @@ const EquipmentBulldozer = ({ className }) => {
 
       // ── Materials ─────────────────────────────────────────────────────────
       const catYellow = new THREE.MeshStandardMaterial({ color: 0xf5a623, roughness: 0.38, metalness: 0.28 });
+      catYellow.onBeforeCompile = (shader) => {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <dithering_fragment>',
+          `
+      float dirt = sin(vViewPosition.x * 8.0) * 0.03;
+      gl_FragColor.rgb -= dirt;
+      #include <dithering_fragment>
+    `
+        );
+      };
       const catYellowDark = new THREE.MeshStandardMaterial({ color: 0xd4891a, roughness: 0.42, metalness: 0.32 });
-      const darkSteel = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 0.22, metalness: 0.92 });
+      const darkSteel = new THREE.MeshStandardMaterial({
+        color: 0x2b2b2b,
+        roughness: 0.58,
+        metalness: 0.72,
+      });
       const rubber = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.88, metalness: 0.04 });
       const chrome = new THREE.MeshStandardMaterial({ color: 0xdde8ee, roughness: 0.08, metalness: 0.97 });
       const exhaustMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.55, metalness: 0.7 });
-      const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xb8e0f7, roughness: 0.04, metalness: 0.08, transparent: true, opacity: 0.22, transmission: 0.88, ior: 1.52, thickness: 0.08 });
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0x7fa6bf,
+        roughness: 0.22,
+        metalness: 0,
+        transparent: true,
+        opacity: 0.45,
+        transmission: 0.35,
+        ior: 1.45,
+        thickness: 0.12,
+      });
       const seatMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 0.75, metalness: 0.05 });
       const grilleMat = new THREE.MeshStandardMaterial({ color: 0x0d0d0d, roughness: 0.6, metalness: 0.5 });
-      const orangeAccent = new THREE.MeshStandardMaterial({ color: 0xd44000, roughness: 0.32, metalness: 0.18 });
       const lightLens = new THREE.MeshStandardMaterial({ color: 0xfffde7, emissive: 0xffe880, emissiveIntensity: 3.5, roughness: 0.05 });
       const redLight = new THREE.MeshStandardMaterial({ color: 0xff2200, emissive: 0xff1100, emissiveIntensity: 2.8, roughness: 0.08 });
       const trackLink = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.35, metalness: 0.78 });
-      const gridMat = new THREE.LineBasicMaterial({ color: 0xf5a623, transparent: true, opacity: 0.1 });
+      const bladeWear = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 0.48, metalness: 0.82 });
 
       // ── Root group ────────────────────────────────────────────────────────
       const model = new THREE.Group();
@@ -212,12 +234,7 @@ const EquipmentBulldozer = ({ className }) => {
         dozer.add(ring);
       });
 
-      // Rear tail lights
-      [[-0.4, -0.78], [0.4, -0.78]].forEach(([tx, tz]) => {
-        const tl = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.07, 0.04), redLight);
-        tl.position.set(tx, 0.68, tz);
-        dozer.add(tl);
-      });
+      
 
       // ── Exhaust Stack ─────────────────────────────────────────────────────
       const exhaustBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.046, 0.12, 10), darkSteel);
@@ -296,10 +313,6 @@ const EquipmentBulldozer = ({ className }) => {
         pillar.castShadow = true;
         cabinGroup.add(pillar);
 
-        // Orange accent stripe on pillar
-        const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.045), orangeAccent);
-        stripe.position.set(px, 0.68, pz);
-        cabinGroup.add(stripe);
       });
 
       // Interior: seat
@@ -354,22 +367,20 @@ const EquipmentBulldozer = ({ className }) => {
       // BLADE LIFT ARM ASSEMBLY
       // ═══════════════════════════════════════════════════════════════════
       const bladeGroup = new THREE.Group();
-      bladeGroup.position.set(0, 0.38, 0.82);
+      bladeGroup.position.set(0, 0.38, 0.7);
       dozer.add(bladeGroup);
 
       // Push arms (C-frame) — two heavy beams angled forward
       [-0.45, 0.45].forEach(ax => {
         // Main push arm
-        const pushArm = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.58), darkSteel);
-        pushArm.position.set(ax, 0.05, 0.25);
-        pushArm.rotation.x = -0.18;
+        const pushArm = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.085, 0.7), darkSteel);
+        pushArm.position.set(ax, 0.04, 0.13);
+        pushArm.rotation.x = -0.14;
         pushArm.castShadow = true;
         bladeGroup.add(pushArm);
 
         // Gusset plate at blade end
-        const gusset = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.14, 0.06), catYellowDark);
-        gusset.position.set(ax, 0.08, 0.52);
-        bladeGroup.add(gusset);
+        
 
         // Ball joint pin at frame
         const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.14, 10), chrome);
@@ -379,15 +390,7 @@ const EquipmentBulldozer = ({ className }) => {
       });
 
       // Hydraulic tilt cylinder (centre)
-      const tiltCylBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.32, 10), darkSteel);
-      tiltCylBase.rotation.x = Math.PI / 6;
-      tiltCylBase.position.set(0, 0.22, 0.15);
-      bladeGroup.add(tiltCylBase);
-
-      const tiltCylRod = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.22, 8), chrome);
-      tiltCylRod.rotation.x = Math.PI / 6;
-      tiltCylRod.position.set(0, 0.1, 0.28);
-      bladeGroup.add(tiltCylRod);
+      
 
       // Lift hydraulics (2 outer)
       [-0.32, 0.32].forEach(hx => {
@@ -404,10 +407,10 @@ const EquipmentBulldozer = ({ className }) => {
 
       // ── Concave Blade ─────────────────────────────────────────────────────
       const buildConcaveBlade = (mat) => {
-        const W = 1.58, H = 0.52, T = 0.055;
-        const arc = Math.PI * 0.44;
+        const W = 1.76, H = 0.62, T = 0.03;
+        const arc = Math.PI * 0.3;
         const R = H / (2 * Math.sin(arc / 2));
-        const vS = 18, wS = 1;
+        const vS = 24, wS = 10;
 
         const pos = [], nor = [], uv = [], idx = [];
         const arcCZ = R * Math.cos(arc / 2);
@@ -418,10 +421,12 @@ const EquipmentBulldozer = ({ className }) => {
           for (let wi = 0; wi <= wS; wi++) {
             const xf = wi / wS;
             const x = -W / 2 + xf * W;
+            const sideWrap = Math.pow(Math.abs(xf * 2 - 1), 2.2) * 0.09;
+            const centerCup = Math.cos((xf - 0.5) * Math.PI) * 0.012;
             for (let vi = 0; vi <= vS; vi++) {
               const t = vi / vS;
               const a = -arc / 2 + t * arc;
-              pos.push(x, r * Math.sin(a), arcCZ - r * Math.cos(a));
+              pos.push(x, r * Math.sin(a), arcCZ - r * Math.cos(a) + sideWrap - centerCup);
               nor.push(0, nd * Math.sin(a), nd * -Math.cos(a));
               uv.push(xf, t);
             }
@@ -473,61 +478,83 @@ const EquipmentBulldozer = ({ className }) => {
       };
 
       const blade = buildConcaveBlade(catYellow);
-      blade.position.set(0, 0.04, 0.52);
+      blade.position.set(0, 0.04, 0.58);
       blade.castShadow = true;
       blade.receiveShadow = true;
       bladeGroup.add(blade);
 
-      // Blade reinforcement ribs (3 vertical)
-      [-0.52, 0, 0.52].forEach(rx => {
-        const rib = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.46, 0.07), catYellowDark);
-        rib.position.set(rx, 0.04, 0.44);
-        rib.castShadow = true;
-        bladeGroup.add(rib);
-      });
+      const bladeCrossTube = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1.36, 12), darkSteel);
+      bladeCrossTube.rotation.z = Math.PI / 2;
+      bladeCrossTube.position.set(0, -0.08, 0.34);
+      bladeCrossTube.castShadow = true;
+      bladeGroup.add(bladeCrossTube);
 
-      // Blade top cap
-      const bladeTop = new THREE.Mesh(new THREE.BoxGeometry(1.58, 0.04, 0.14), catYellowDark);
-      bladeTop.position.set(0, 0.29, 0.44);
+      // Blade reinforcement ribs
+     
+
+      // Blade top rolled lip
+      
+
+      const bladeTop = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.04, 0.2), catYellowDark);
+      bladeTop.position.set(0, 0.33, 0.58);
+      bladeTop.castShadow = true;
       bladeGroup.add(bladeTop);
 
       // Cutting edge (heavy black steel bottom)
-      const cuttingEdge = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.06, 0.1), darkSteel);
-      cuttingEdge.position.set(0, -0.22, 0.5);
+      const cuttingEdge = new THREE.Mesh(new THREE.BoxGeometry(1.84, 0.065, 0.14), bladeWear);
+      cuttingEdge.position.set(0, -0.23, 0.62);
+      cuttingEdge.rotation.x = -0.1;
       cuttingEdge.castShadow = true;
       bladeGroup.add(cuttingEdge);
 
       // Cutting edge bolts
-      for (let bi = -6; bi <= 6; bi += 2) {
-        const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.06, 6), chrome);
+      for (let bi = -7; bi <= 7; bi += 2) {
+        const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.05, 0.06, 6), chrome);
         bolt.rotation.x = Math.PI / 2;
-        bolt.position.set(bi * 0.115, -0.22, 0.55);
+        bolt.position.set(bi * 0.105, -0.23, 0.72);
         bladeGroup.add(bolt);
       }
 
       // Blade end plates (left & right)
-      [-0.8, 0.8].forEach(epx => {
-        const endPlate = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.52, 0.18), darkSteel);
-        endPlate.position.set(epx, 0.04, 0.44);
+      [-0.9, 0.9].forEach(epx => {
+        const endPlate = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.6, 0.2), bladeWear);
+        endPlate.position.set(epx, 0.03, 0.58);
+        endPlate.rotation.y = epx < 0 ? -0.18 : 0.18;
+        endPlate.castShadow = true;
         bladeGroup.add(endPlate);
       });
 
       // ── Ground shadow & grid ──────────────────────────────────────────────
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.ShadowMaterial({ opacity: 0.4 }));
-      shadow.rotation.x = -Math.PI / 2;
-      shadow.position.y = -0.12;
-      shadow.receiveShadow = true;
-      model.add(shadow);
+      const shadowCanvas = document.createElement('canvas');
+      shadowCanvas.width = 160;
+      shadowCanvas.height = 96;
+      const shadowCtx = shadowCanvas.getContext('2d');
+      const shadowGradient = shadowCtx.createRadialGradient(80, 48, 8, 80, 48, 80);
+      shadowGradient.addColorStop(0, 'rgba(0,0,0,0.34)');
+      shadowGradient.addColorStop(0.68, 'rgba(0,0,0,0.16)');
+      shadowGradient.addColorStop(1, 'rgba(0,0,0,0)');
+      shadowCtx.fillStyle = shadowGradient;
+      shadowCtx.fillRect(0, 0, shadowCanvas.width, shadowCanvas.height);
 
-      const grid = new THREE.GridHelper(5, 12, 0xf5a623, 0x1e293b);
-      grid.position.y = -0.12;
-      grid.material = gridMat;
-      model.add(grid);
+      const contactShadowTexture = new THREE.CanvasTexture(shadowCanvas);
+      const contactShadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(3.0, 1.25),
+        new THREE.MeshBasicMaterial({
+          map: contactShadowTexture,
+          transparent: true,
+          opacity: 0.46,
+          depthWrite: false,
+        })
+      );
 
+      contactShadow.rotation.x = -Math.PI / 2;
+      contactShadow.position.set(0, -0.11, 0.12);
+
+      scene.add(contactShadow);
       // ── Lighting ──────────────────────────────────────────────────────────
       scene.add(new THREE.HemisphereLight(0xfff8e7, 0x0a1628, 1.8));
 
-      const sun = new THREE.DirectionalLight(0xfff5e0, 5.5);
+      const sun = new THREE.DirectionalLight(0xffffff, 2.4);
       sun.position.set(-4, 6, 4);
       sun.castShadow = true;
       sun.shadow.mapSize.set(2048, 2048);
@@ -577,13 +604,13 @@ const EquipmentBulldozer = ({ className }) => {
         const t = (performance.now() - startTime) / 1000;
 
         // Gentle body suspension bounce
-        dozer.position.y = Math.sin(t * 1.3) * 0.025;
+        dozer.position.y = Math.sin(t * 1) * 0.02;
 
         // Blade slowly lifts and drops (working motion)
         bladeGroup.rotation.x = Math.sin(t * 1.6) * 0.1 - 0.04;
 
         // Slow showcase rotation
-        model.rotation.y = -0.5 + Math.sin(t * 0.24) * 0.28;
+        model.rotation.y = -0.3 + Math.sin(t * 0.24) * 0.28;
 
         // Hydraulic rods animate with blade
         renderer.render(scene, camera);
@@ -597,12 +624,15 @@ const EquipmentBulldozer = ({ className }) => {
         cancelAnimationFrame(resizeFrameId);
         resizeObserver.disconnect();
         if (renderer.domElement.parentElement === mount) mount.removeChild(renderer.domElement);
+        const disposeMaterial = (material) => {
+          material.map?.dispose();
+          material.dispose();
+        };
         scene.traverse(o => {
           if (!o.isMesh && !o.isLine) return;
           o.geometry?.dispose();
-          Array.isArray(o.material) ? o.material.forEach(m => m.dispose()) : o.material?.dispose();
+          Array.isArray(o.material) ? o.material.forEach(disposeMaterial) : o.material && disposeMaterial(o.material);
         });
-        gridMat.dispose();
         renderer.dispose();
       };
     };

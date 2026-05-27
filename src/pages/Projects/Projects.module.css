@@ -359,3 +359,82 @@
   -webkit-backface-visibility: hidden;
   will-change: transform;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 54px;
+  padding: 0 20px;
+}
+
+.paginationBtn {
+  padding: 10px 16px;
+  color: #ffffff;
+  background: #12448b;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.paginationBtn:hover:not(:disabled) {
+  background: #f47b20;
+  transform: translateY(-2px);
+}
+
+.paginationBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageNumbers {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pageNumber {
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #12448b;
+  background: transparent;
+  border: 2px solid #12448b;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.pageNumber:hover {
+  background: #12448b;
+  color: #ffffff;
+}
+
+.pageNumber.active {
+  background: #12448b;
+  color: #ffffff;
+}
+
+@media (max-width: 520px) {
+  .pagination {
+    gap: 8px;
+  }
+
+  .paginationBtn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .pageNumber {
+    min-width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+}

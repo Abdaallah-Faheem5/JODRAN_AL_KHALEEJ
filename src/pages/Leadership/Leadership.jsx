@@ -1,4 +1,5 @@
 import { useLocation, Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import team from '../../data/team';
 import styles from './Leadership.module.css';
 import { FaUserTie, FaGraduationCap, FaBriefcase, FaArrowRight } from 'react-icons/fa';
@@ -6,6 +7,10 @@ import LeadershipEngineer from '../../components/LeadershipEngineer/LeadershipEn
 
 const Leadership = ({ isDedicatedPage }) => {
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   const showHero = isDedicatedPage !== undefined ? isDedicatedPage : location.pathname === '/leadership';
   return (
     <main className={styles.leadershipPage}>

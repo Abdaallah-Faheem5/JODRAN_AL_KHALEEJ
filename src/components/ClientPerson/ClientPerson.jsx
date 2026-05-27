@@ -7,394 +7,517 @@ const ClientPerson = ({ className }) => {
   useEffect(() => {
     const mount = mountRef.current;
     let cleanupScene;
-    let isMounted = true;
 
-    if (!mount) return undefined;
+    if (!mount) return;
 
-    const initScene = () => {
-      if (!isMounted || !mountRef.current) return;
+    const scene = new THREE.Scene();
 
-      // ── Scene / Camera ─────────────────────────────────────────────────
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-      camera.position.set(0, 0.4, 3.6);
-      camera.lookAt(0, 0.0, 0);
+    const camera = new THREE.PerspectiveCamera(
+      30,
+      1,
+      0.1,
+      100
+    );
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setClearColor(0x000000, 0);
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.15;
-      mount.appendChild(renderer.domElement);
+    camera.position.set(0, 0.4, 3.6);
+    camera.lookAt(0, 0, 0);
 
-      // ── Materials ───────────────────────────────────────────────────────
-      const leatherMain = new THREE.MeshStandardMaterial({
-        color: 0x2b1a0e,  // dark espresso leather
-        roughness: 0.72,
-        metalness: 0.06,
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance',
+    });
+
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, 2)
+    );
+
+    renderer.setClearColor(0x000000, 0);
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type =
+      THREE.PCFSoftShadowMap;
+
+    renderer.toneMapping =
+      THREE.ACESFilmicToneMapping;
+
+    renderer.toneMappingExposure = 1.2;
+
+    mount.appendChild(renderer.domElement);
+
+    // ── MATERIALS ─────────────────────────────────────
+    const leatherMain =
+      new THREE.MeshStandardMaterial({
+        color: 0x0a0a0a,
+        roughness: 0.58,
+        metalness: 0.12,
       });
-      const leatherAccent = new THREE.MeshStandardMaterial({
-        color: 0x1a0f07,  // near-black leather trim
-        roughness: 0.78,
-        metalness: 0.04,
+
+    const leatherAccent =
+      new THREE.MeshStandardMaterial({
+        color: 0x050505,
+        roughness: 0.5,
+        metalness: 0.18,
       });
-      const leatherLight = new THREE.MeshStandardMaterial({
-        color: 0x3d2510,  // slightly lighter for flap & side panels
-        roughness: 0.68,
-        metalness: 0.05,
+
+    const leatherLight =
+      new THREE.MeshStandardMaterial({
+        color: 0x151515,
+        roughness: 0.52,
+        metalness: 0.1,
       });
-      const brass = new THREE.MeshStandardMaterial({
+
+    const brass =
+      new THREE.MeshStandardMaterial({
         color: 0xc8952a,
-        roughness: 0.14,
+        roughness: 0.18,
         metalness: 0.92,
       });
-      const chrome = new THREE.MeshStandardMaterial({
+
+    const chrome =
+      new THREE.MeshStandardMaterial({
         color: 0xdde4ea,
-        roughness: 0.06,
-        metalness: 0.97,
+        roughness: 0.05,
+        metalness: 1,
       });
-      const stitchMat = new THREE.MeshStandardMaterial({
-        color: 0xc8a86a,
-        roughness: 0.82,
-        metalness: 0.0,
-      });
-      const lockBody = new THREE.MeshStandardMaterial({
+
+    const lockBody =
+      new THREE.MeshStandardMaterial({
         color: 0xb8841e,
-        roughness: 0.18,
-        metalness: 0.88,
-      });
-      const gridMat = new THREE.LineBasicMaterial({
-        color: 0x38bdf8,
-        transparent: true,
-        opacity: 0.12,
+        roughness: 0.2,
+        metalness: 0.9,
       });
 
-      // ── Model group ─────────────────────────────────────────────────────
-      const model = new THREE.Group();
-      scene.add(model);
+    // ── MODEL ─────────────────────────────────────────
+    const model = new THREE.Group();
+    scene.add(model);
 
-      const bag = new THREE.Group();
-      bag.position.y = 0.02;
-      model.add(bag);
+    const bag = new THREE.Group();
+    model.add(bag);
 
-      // ── MAIN BODY ────────────────────────────────────────────────────────
-      // Bottom base (slightly wider / trapezoidal profile)
-      const bodyMain = new THREE.Mesh(
-        new THREE.BoxGeometry(1.12, 0.72, 0.42),
-        leatherMain,
+    // ── MAIN BODY ─────────────────────────────────────
+    const bodyMain = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        1.12,
+        0.72,
+        0.42,
+        8,
+        8,
+        8
+      ),
+      leatherMain
+    );
+
+    bodyMain.geometry.computeVertexNormals();
+
+    bodyMain.castShadow = true;
+    bodyMain.receiveShadow = true;
+
+    bag.add(bodyMain);
+
+    // front panel
+    const frontPanel = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        1.08,
+        0.68,
+        0.025
+      ),
+      leatherLight
+    );
+
+    frontPanel.position.z = 0.215;
+    bag.add(frontPanel);
+
+    // back panel
+    const backPanel = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        1.08,
+        0.68,
+        0.025
+      ),
+      leatherAccent
+    );
+
+    backPanel.position.z = -0.215;
+    bag.add(backPanel);
+
+    // side panels
+    [-0.56, 0.56].forEach((x) => {
+      const side = new THREE.Mesh(
+        new THREE.BoxGeometry(
+          0.03,
+          0.68,
+          0.38
+        ),
+        leatherAccent
       );
-      bodyMain.castShadow = true;
-      bodyMain.receiveShadow = true;
-      bag.add(bodyMain);
 
-      // Body corner rounding — overlay thin panels on each face
-      // Front face
-      const frontPanel = new THREE.Mesh(
-        new THREE.BoxGeometry(1.1, 0.7, 0.02),
-        leatherLight,
+      side.position.x = x;
+      side.castShadow = true;
+
+      bag.add(side);
+    });
+
+    // bottom strip
+    const bottom = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        1.1,
+        0.05,
+        0.43
+      ),
+      leatherAccent
+    );
+
+    bottom.position.y = -0.36;
+    bag.add(bottom);
+
+    // ── FEET ──────────────────────────────────────────
+    [
+      [-0.42, -0.16],
+      [0.42, -0.16],
+      [-0.42, 0.16],
+      [0.42, 0.16],
+    ].forEach(([x, z]) => {
+      const foot = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+          0.03,
+          0.03,
+          0.04,
+          14
+        ),
+        brass
       );
-      frontPanel.position.z = 0.22;
-      bag.add(frontPanel);
 
-      // Back face
-      const backPanel = new THREE.Mesh(
-        new THREE.BoxGeometry(1.1, 0.7, 0.02),
-        leatherAccent,
+      foot.rotation.x = Math.PI / 2;
+
+      foot.position.set(
+        x,
+        -0.39,
+        z
       );
-      backPanel.position.z = -0.22;
-      bag.add(backPanel);
 
-      // ── GUSSET / SIDES ────────────────────────────────────────────────────
-      [-0.57, 0.57].forEach(sx => {
-        // Side gusset panel (visible leather seam)
-        const gusset = new THREE.Mesh(
-          new THREE.BoxGeometry(0.02, 0.7, 0.4),
-          leatherAccent,
-        );
-        gusset.position.x = sx;
-        gusset.castShadow = true;
-        bag.add(gusset);
+      foot.castShadow = true;
 
-        // Corner piping
-        const pipe = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.025, 0.025, 0.72, 10),
-          leatherAccent,
-        );
-        pipe.position.set(sx, 0, 0);
-        pipe.castShadow = true;
-        bag.add(pipe);
-      });
+      bag.add(foot);
+    });
 
-      // Bottom piping
-      const bottomPipe = new THREE.Mesh(
-        new THREE.BoxGeometry(1.14, 0.04, 0.44),
-        leatherAccent,
+    // ── REAL FRONT FLAP ───────────────────────────────
+
+    // ── HANDLE ────────────────────────────────────────
+    const handleCurve =
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.24, 0.42, 0),
+        new THREE.Vector3(-0.18, 0.62, 0),
+        new THREE.Vector3(0.18, 0.62, 0),
+        new THREE.Vector3(0.24, 0.42, 0),
+      ]);
+
+    const handleGeometry =
+      new THREE.TubeGeometry(
+        handleCurve,
+        40,
+        0.03,
+        20,
+        false
       );
-      bottomPipe.position.y = -0.37;
-      bag.add(bottomPipe);
 
-      // ── PROTECTIVE FEET (4 brass studs bottom) ───────────────────────────
-      [[-0.44, -0.44], [0.44, -0.44], [-0.44, 0.44], [0.44, 0.44]].forEach(([fx, fz]) => {
-        const foot = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.04, 0.04, 0.045, 10),
-          brass,
-        );
-        foot.rotation.x = Math.PI / 2;
-        foot.position.set(fx, -0.385, fz);
-        foot.castShadow = true;
-        bag.add(foot);
-      });
+    const handle = new THREE.Mesh(
+      handleGeometry,
+      leatherAccent
+    );
 
-      // ── TOP FLAP ──────────────────────────────────────────────────────────
-      const flapGroup = new THREE.Group();
-      flapGroup.position.set(0, 0.36, 0);
-      bag.add(flapGroup);
+    handle.castShadow = true;
 
-      // Flap main surface
-      const flap = new THREE.Mesh(
-        new THREE.BoxGeometry(1.1, 0.14, 0.44),
-        leatherLight,
+    bag.add(handle);
+
+    // straps only
+    [-0.24, 0.24].forEach((x) => {
+      const strap = new THREE.Mesh(
+        new THREE.BoxGeometry(
+          0.05,
+          0.16 ,
+          0.03
+        ),
+        leatherAccent
       );
-      flap.position.y = 0.06;
-      flap.castShadow = true;
-      flapGroup.add(flap);
 
-      // Flap front lip (droops slightly)
-      const flapLip = new THREE.Mesh(
-        new THREE.BoxGeometry(1.08, 0.08, 0.03),
-        leatherLight,
+      strap.position.set(
+        x,
+        0.35,
+        0
       );
-      flapLip.position.set(0, 0.02, 0.235);
-      flapGroup.add(flapLip);
 
-      // ── HANDLE ────────────────────────────────────────────────────────────
-      const handleGroup = new THREE.Group();
-      handleGroup.position.set(0, 0.46, 0);
-      bag.add(handleGroup);
+      strap.castShadow = true;
 
-      // Handle bar (curved — approximated with a tube-like box + end cylinders)
-      const handleBar = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.038, 0.038, 0.5, 14),
-        leatherAccent,
+      bag.add(strap);
+
+      const rivet = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+          0.012,
+          0.012,
+          0.02,
+          12
+        ),
+        brass
       );
-      handleBar.rotation.z = Math.PI / 2;
-      handleBar.castShadow = true;
-      handleGroup.add(handleBar);
 
-      // Leather wrapping highlight
-      const handleWrap = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.036, 0.036, 0.48, 14),
-        leatherMain,
+      rivet.rotation.x = Math.PI / 2;
+
+      rivet.position.set(
+        x,
+        0.36,
+        0.018
       );
-      handleWrap.rotation.z = Math.PI / 2;
-      handleGroup.add(handleWrap);
 
-      // Handle attachment loops (D-rings)
-      [-0.26, 0.26].forEach(hx => {
-        // Loop strap
-        const loop = new THREE.Mesh(
-          new THREE.BoxGeometry(0.055, 0.14, 0.045),
-          leatherAccent,
-        );
-        loop.position.set(hx, -0.08, 0);
-        handleGroup.add(loop);
+      bag.add(rivet);
+    });
 
-        // D-ring hardware
-        const dRing = new THREE.Mesh(
-          new THREE.TorusGeometry(0.042, 0.012, 8, 18),
-          brass,
-        );
-        dRing.position.set(hx, -0.06, 0);
-        handleGroup.add(dRing);
+    // ── FRONT POCKET / FLAP ───────────────────────────
+    const pocket = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        0.5,
+        0.22,
+        0.06
+      ),
+      leatherAccent
+    );
 
-        // Strap rivet
-        const rivet = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.016, 0.016, 0.05, 8),
-          brass,
-        );
-        rivet.rotation.x = Math.PI / 2;
-        rivet.position.set(hx, -0.1, 0.025);
-        handleGroup.add(rivet);
-      });
+    pocket.position.set(
+      0,
+      -0.02,
+      0.24
+    );
 
-      // ── COMBINATION LOCK / CLASP (centre) ──────────────────────────────
-      const claspGroup = new THREE.Group();
-      claspGroup.position.set(0, 0.08, 0.23);
-      bag.add(claspGroup);
+    pocket.castShadow = true;
 
-      // Lock housing
-      const lockHousing = new THREE.Mesh(
-        new THREE.BoxGeometry(0.24, 0.1, 0.04),
-        lockBody,
+    bag.add(pocket);
+
+    // pocket flap
+    const pocketFlap = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        0.54,
+        0.06,
+        0.08
+      ),
+      leatherLight
+    );
+
+    pocketFlap.position.set(
+      0,
+      0.08,
+      0.25
+    );
+
+    pocketFlap.castShadow = true;
+
+    bag.add(pocketFlap);
+
+    // vertical leather strip
+    const strip = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        0.08,
+        0.23,
+        0.02
+      ),
+      leatherMain
+    );
+
+    strip.position.set(
+      0,
+      -0.02,
+      0.27
+    );
+
+    bag.add(strip);
+
+    // small metal detail
+    const metalDot = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        0.015,
+        0.015,
+        0.02,
+        16
+      ),
+      brass
+    );
+
+    metalDot.rotation.x = Math.PI / 2;
+
+    metalDot.position.set(
+      0,
+      -0.02,
+      0.285
+    );
+
+    bag.add(metalDot);
+    // ── SIDE BUCKLES ──────────────────────────────────
+    [-0.48, 0.48].forEach((x) => {
+      const buckle = new THREE.Mesh(
+        new THREE.BoxGeometry(
+          0.06,
+          0.09,
+          0.025
+        ),
+        brass
       );
-      lockHousing.castShadow = true;
-      claspGroup.add(lockHousing);
 
-      // Lock shackle
-      const shackle = new THREE.Mesh(
-        new THREE.TorusGeometry(0.055, 0.014, 10, 20, Math.PI),
-        chrome,
+      buckle.position.set(
+        x,
+        0,
+        0.22
       );
-      shackle.position.y = 0.065;
-      shackle.rotation.x = Math.PI;
-      claspGroup.add(shackle);
 
-      // 3 digit wheels
-      for (let di = 0; di < 3; di++) {
-        const wheel = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.022, 0.022, 0.045, 12),
-          chrome,
-        );
-        wheel.rotation.z = Math.PI / 2;
-        wheel.position.set(-0.06 + di * 0.06, -0.015, 0.022);
-        claspGroup.add(wheel);
-      }
+      bag.add(buckle);
+    });
 
-      // ── SIDE BUCKLES (decorative) ─────────────────────────────────────────
-      [-0.48, 0.48].forEach(bx => {
-        const buckleFrame = new THREE.Mesh(
-          new THREE.BoxGeometry(0.07, 0.1, 0.03),
-          brass,
-        );
-        buckleFrame.position.set(bx, 0.0, 0.225);
-        bag.add(buckleFrame);
+    // ── SHADOW FLOOR ──────────────────────────────────
+    const shadow = new THREE.Mesh(
+      new THREE.PlaneGeometry(6, 6),
+      new THREE.ShadowMaterial({
+        opacity: 0.35,
+      })
+    );
 
-        // Buckle bar
-        const buckleBar = new THREE.Mesh(
-          new THREE.BoxGeometry(0.065, 0.018, 0.035),
-          brass,
-        );
-        buckleBar.position.set(bx, 0.0, 0.232);
-        bag.add(buckleBar);
+    shadow.rotation.x = -Math.PI / 2;
 
-        // Strap through buckle
-        const strap = new THREE.Mesh(
-          new THREE.BoxGeometry(0.04, 0.16, 0.016),
-          leatherAccent,
-        );
-        strap.position.set(bx, -0.04, 0.228);
-        bag.add(strap);
-      });
+    shadow.position.y = -0.72;
 
-      // ── STITCHING DETAILS (small dots along seams) ────────────────────────
-      for (let si = -4; si <= 4; si++) {
-        const stitch = new THREE.Mesh(
-          new THREE.BoxGeometry(0.012, 0.012, 0.018),
-          stitchMat,
-        );
-        stitch.position.set(si * 0.12, -0.34, 0.222);
-        bag.add(stitch);
+    shadow.receiveShadow = true;
 
-        const stitchB = new THREE.Mesh(
-          new THREE.BoxGeometry(0.012, 0.012, 0.018),
-          stitchMat,
-        );
-        stitchB.position.set(si * 0.12, 0.34, 0.222);
-        bag.add(stitchB);
-      }
+    model.add(shadow);
 
-      // ── LOGO EMBOSS (front centre) ─────────────────────────────────────────
-      const logoPlate = new THREE.Mesh(
-        new THREE.BoxGeometry(0.18, 0.08, 0.015),
-        brass,
+    // ── LIGHTS ────────────────────────────────────────
+    scene.add(
+      new THREE.HemisphereLight(
+        0xffffff,
+        0x111111,
+        1.5
+      )
+    );
+
+    const key =
+      new THREE.DirectionalLight(
+        0xffffff,
+        6
       );
-      logoPlate.position.set(0, -0.12, 0.232);
-      bag.add(logoPlate);
 
-      // ── GROUND / GRID ──────────────────────────────────────────────────────
-      const shadow = new THREE.Mesh(
-        new THREE.PlaneGeometry(6, 6),
-        new THREE.ShadowMaterial({ opacity: 0.42 }),
+    key.position.set(-3, 5, 4);
+
+    key.castShadow = true;
+
+    key.shadow.mapSize.set(2048, 2048);
+
+    scene.add(key);
+
+    const fill =
+      new THREE.DirectionalLight(
+        0xb0c8ff,
+        2
       );
-      shadow.rotation.x = -Math.PI / 2;
-      shadow.position.y = -0.72;
-      shadow.receiveShadow = true;
-      model.add(shadow);
 
-      const grid = new THREE.GridHelper(4.5, 14, 0x38bdf8, 0x0c2a54);
-      grid.position.y = -0.72;
-      grid.material = gridMat;
-      model.add(grid);
+    fill.position.set(4, 2, 2);
 
-      // ── LIGHTING ──────────────────────────────────────────────────────────
-      scene.add(new THREE.HemisphereLight(0xfff4e8, 0x0a1628, 1.5));
+    scene.add(fill);
 
-      const key = new THREE.DirectionalLight(0xfff8f0, 6.0);
-      key.position.set(-3, 5, 4);
-      key.castShadow = true;
-      key.shadow.mapSize.set(2048, 2048);
-      key.shadow.camera.left = -3; key.shadow.camera.right = 3;
-      key.shadow.camera.top = 3; key.shadow.camera.bottom = -3;
-      key.shadow.bias = -0.001;
-      scene.add(key);
+    const rim =
+      new THREE.DirectionalLight(
+        0x66aaff,
+        1.2
+      );
 
-      const fill = new THREE.DirectionalLight(0xb0c8ff, 2.0);
-      fill.position.set(4, 2, 2);
-      scene.add(fill);
+    rim.position.set(0, 1, -4);
 
-      const rim = new THREE.DirectionalLight(0x66aaff, 1.4);
-      rim.position.set(0, 1, -4);
-      scene.add(rim);
+    scene.add(rim);
 
-      const ground = new THREE.PointLight(0xf47b20, 2.2, 5);
-      ground.position.set(0.5, -0.4, 1.5);
-      scene.add(ground);
+    // ── RESIZE ────────────────────────────────────────
+    const resize = () => {
+      const rect =
+        mount.getBoundingClientRect();
 
-      // ── Resize & Animation ────────────────────────────────────────────────
-      let frameId = 0, resizeFrameId = 0;
-      const startTime = performance.now();
+      renderer.setSize(
+        rect.width,
+        rect.height,
+        false
+      );
 
-      const applyResize = () => {
-        const s = mount.getBoundingClientRect();
-        const w = Math.max(1, Math.floor(s.width));
-        const h = Math.max(1, Math.floor(s.height));
-        renderer.setSize(w, h, false);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-      };
-      const resize = () => { cancelAnimationFrame(resizeFrameId); resizeFrameId = requestAnimationFrame(applyResize); };
-      const ro = new ResizeObserver(resize);
-      ro.observe(mount);
-      applyResize();
+      camera.aspect =
+        rect.width / rect.height;
 
-      const render = () => {
-        const t = (performance.now() - startTime) / 1000;
-
-        // Float up/down
-        bag.position.y = 0.02 + Math.sin(t * 1.2) * 0.035;
-        // Slow showcase rotation
-        model.rotation.y = Math.sin(t * 0.28) * 0.65;
-        // Subtle sway
-        bag.rotation.z = Math.sin(t * 0.7) * 0.022;
-        bag.rotation.x = Math.sin(t * 0.5) * 0.018;
-
-        renderer.render(scene, camera);
-        frameId = requestAnimationFrame(render);
-      };
-      render();
-
-      cleanupScene = () => {
-        cancelAnimationFrame(frameId);
-        cancelAnimationFrame(resizeFrameId);
-        ro.disconnect();
-        if (renderer.domElement.parentElement === mount) mount.removeChild(renderer.domElement);
-        scene.traverse(o => {
-          if (!o.isMesh && !o.isLine) return;
-          o.geometry?.dispose();
-          Array.isArray(o.material) ? o.material.forEach(m => m.dispose()) : o.material?.dispose();
-        });
-        gridMat.dispose();
-        renderer.dispose();
-      };
+      camera.updateProjectionMatrix();
     };
 
-    initScene();
-    return () => { isMounted = false; if (cleanupScene) cleanupScene(); };
+    resize();
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(mount);
+
+    // ── ANIMATION ─────────────────────────────────────
+    const start = performance.now();
+
+    let frame;
+
+    const animate = () => {
+      const t =
+        (performance.now() - start) / 1000;
+
+      bag.position.y =
+        Math.sin(t * 1.2) * 0.03;
+
+      model.rotation.y =
+        Math.sin(t * 0.3) * 0.5;
+
+      bag.rotation.z =
+        Math.sin(t * 0.7) * 0.015;
+
+      renderer.render(scene, camera);
+
+      frame =
+        requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    cleanupScene = () => {
+      cancelAnimationFrame(frame);
+
+      ro.disconnect();
+
+      scene.traverse((obj) => {
+        if (obj.geometry)
+          obj.geometry.dispose();
+
+        if (obj.material) {
+          if (Array.isArray(obj.material)) {
+            obj.material.forEach((m) =>
+              m.dispose()
+            );
+          } else {
+            obj.material.dispose();
+          }
+        }
+      });
+
+      renderer.dispose();
+
+      if (
+        renderer.domElement.parentNode === mount
+      ) {
+        mount.removeChild(
+          renderer.domElement
+        );
+      }
+    };
+
+    return cleanupScene;
   }, []);
 
-  return <div ref={mountRef} className={className} aria-hidden="true" />;
+  return (
+    <div
+      ref={mountRef}
+      className={className}
+      aria-hidden="true"
+    />
+  );
 };
 
 export default ClientPerson;
