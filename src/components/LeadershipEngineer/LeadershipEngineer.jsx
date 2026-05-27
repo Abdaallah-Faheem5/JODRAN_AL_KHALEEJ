@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import logoImg from '../../assets/icons/logo1.png';
+
 const LeadershipEngineer = ({ className }) => {
   const mountRef = useRef(null);
 
@@ -195,9 +195,7 @@ const LeadershipEngineer = ({ className }) => {
       // ── Company logo screen ────────────────────────────────────────────
 const textureLoader = new THREE.TextureLoader();
 
-
-const logoTexture = textureLoader.load(logoImg);
-// const logoTexture = textureLoader.load('./src/assets/icons/logo1.png');
+const logoTexture = textureLoader.load('./src/assets/icons/logo1.png');
 
 logoTexture.colorSpace = THREE.SRGBColorSpace;
 logoTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
