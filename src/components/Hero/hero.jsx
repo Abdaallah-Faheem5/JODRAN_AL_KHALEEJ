@@ -15,12 +15,12 @@ const Hero = () => {
           safety, and disciplined project delivery.
         </p>
         <div className={styles.actions}>
-          <Link className={styles.primaryButton} to="/projects">
-            View Projects
-          </Link>
-          <a className={styles.secondaryButton} href="#about">
+            <Link className={styles.primaryButton} to="/projects">
+              View Projects
+            </Link>
+          <Link className={styles.secondaryButton} to="/#about">
             About Company
-          </a>
+          </Link>
         </div>
       </div>
 
