@@ -41,7 +41,9 @@ const EquipmentBulldozer = ({ className }) => {
     `
         );
       };
-      const catYellowDark = new THREE.MeshStandardMaterial({ color: 0xd4891a, roughness: 0.42, metalness: 0.32 });
+      const catYellowDark = new THREE.MeshStandardMaterial({ color: 0xf5a623, roughness: 0.42, metalness: 0.32 });
+      const catYellowDark2 = new THREE.MeshStandardMaterial({ color: 0xd4891a, roughness: 0.42, metalness: 0.32 });
+
       const darkSteel = new THREE.MeshStandardMaterial({
         color: 0x2b2b2b,
         roughness: 0.58,
@@ -181,88 +183,69 @@ const EquipmentBulldozer = ({ className }) => {
         dozer.add(fender);
       });
 
-      // Upper engine deck
-      const engineDeck = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.42, 0.85), catYellow);
-      engineDeck.position.set(0, 0.68, 0.3);
+      // Upper engine deck+++++
+      const engineDeck = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.3, 0.65), catYellow);
+      engineDeck.position.set(0, 0.6, -0.4);
       engineDeck.castShadow = true;
       engineDeck.receiveShadow = true;
       dozer.add(engineDeck);
 
-      // Engine deck cover ridge
-      const deckRidge = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.05, 0.82), catYellowDark);
-      deckRidge.position.set(0, 0.9, 0.3);
+      // Engine deck cover ridge++++++
+      const deckRidge = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.15, 0.55), catYellowDark);
+      deckRidge.position.set(0, 0.8, -0.4);
       deckRidge.castShadow = true;
       dozer.add(deckRidge);
 
       // ── Radiator grille (front of engine) ────────────────────────────────
-      const grilleBase = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.36, 0.04), grilleMat);
-      grilleBase.position.set(0, 0.68, 0.73);
-      grilleBase.castShadow = true;
-      dozer.add(grilleBase);
 
-      // Grille louvres
-      for (let i = 0; i < 8; i++) {
-        const ly = 0.52 + i * 0.046;
-        const louvre = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.018, 0.05), chrome);
-        louvre.position.set(0, ly, 0.75);
-        louvre.rotation.x = 0.25;
-        dozer.add(louvre);
-      }
-
-      // Grille surround frame
-      const grilleSurround = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.42, 0.05), catYellowDark);
-      grilleSurround.position.set(0, 0.68, 0.72);
-      dozer.add(grilleSurround);
-      const grilleHole = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.32, 0.06), grilleMat);
-      grilleHole.position.set(0, 0.68, 0.73);
-      dozer.add(grilleHole);
 
       // ── Headlights ────────────────────────────────────────────────────────
-      [[-0.32, 0.82], [0.32, 0.82]].forEach(([hx, hz]) => {
+      [[-0.32, 0.7], [0.32, 0.7]].forEach(([hx, hz]) => {
         const housing = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.1, 0.06), darkSteel);
-        housing.position.set(hx, 0.82, hz);
+        housing.position.set(hx, 1.5, hz);
         dozer.add(housing);
 
+
         const lens = new THREE.Mesh(new THREE.CircleGeometry(0.045, 16), lightLens);
-        lens.position.set(hx, 0.82, hz + 0.035);
+        lens.position.set(hx, 1.5, hz + 0.035);
         dozer.add(lens);
 
         // Light ring
         const ring = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.012, 16), chrome);
         ring.rotation.x = Math.PI / 2;
-        ring.position.set(hx, 0.82, hz + 0.028);
+        ring.position.set(hx, 1.5, hz + 0.028);
         dozer.add(ring);
       });
 
-      
+
 
       // ── Exhaust Stack ─────────────────────────────────────────────────────
       const exhaustBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.046, 0.12, 10), darkSteel);
-      exhaustBase.position.set(0.28, 0.93, 0.22);
+      exhaustBase.position.set(0.28, 0.93, -0.32);
       dozer.add(exhaustBase);
 
       const exhaustPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.038, 0.55, 10), exhaustMat);
-      exhaustPipe.position.set(0.28, 1.24, 0.22);
+      exhaustPipe.position.set(0.28, 1.24, -0.32);
       exhaustPipe.castShadow = true;
       dozer.add(exhaustPipe);
 
       // Chrome stack tip
       const stackTip = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.025, 0.06, 10), chrome);
-      stackTip.position.set(0.28, 1.52, 0.22);
+      stackTip.position.set(0.28, 1.52, -0.32);
       dozer.add(stackTip);
 
       // Rain cap
       const rainCap = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.06, 10), darkSteel);
-      rainCap.position.set(0.28, 1.56, 0.22);
+      rainCap.position.set(0.28, 1.56, -0.32);
       rainCap.rotation.z = Math.PI;
       dozer.add(rainCap);
 
       // ── Air filter housing ────────────────────────────────────────────────
       const airFilter = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.18, 10), darkSteel);
-      airFilter.position.set(-0.28, 0.98, 0.26);
+      airFilter.position.set(-0.28, 0.98, -0.32);
       dozer.add(airFilter);
       const airFilterTop = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.045, 0.04, 10), catYellow);
-      airFilterTop.position.set(-0.28, 1.08, 0.26);
+      airFilterTop.position.set(-0.28, 1.08, -0.32);
       dozer.add(airFilterTop);
 
       // ═══════════════════════════════════════════════════════════════════
@@ -272,42 +255,54 @@ const EquipmentBulldozer = ({ className }) => {
       cabinGroup.position.set(0, 0, -0.22);
       dozer.add(cabinGroup);
 
-      // Cabin floor plate
+      // Cabin floor plate+++++++++++++++++++++++++++++++++++++
       const cabinFloor = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.65, 0.72), catYellowDark);
-      cabinFloor.position.set(0, 0.55, 0);
+      cabinFloor.position.set(0, 0.55, 0.534);
       cabinGroup.add(cabinFloor);
 
+      const cabinFloor2 = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.55, 0.8), catYellowDark2);
+      cabinFloor2.position.set(0, 0.55, 0.534);
+      cabinGroup.add(cabinFloor2);
+
+      const cabinFloor3 = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.45, 0.75), chrome);
+      cabinFloor3.position.set(0, 0.55, 0.534);
+      cabinGroup.add(cabinFloor3);
+
+      const cabinFloor4 = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.45, 0.9), chrome);
+      cabinFloor4.position.set(0, 0.55, 0.534);
+      cabinGroup.add(cabinFloor4);
+
       // Cabin walls (glass panels) — front, rear, sides
-      const panelFront = new THREE.Mesh(new THREE.BoxGeometry(0.82, 1.0, 0.04), glassMat);
-      panelFront.position.set(0, 1.0, 0.36);
+      const panelFront = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.55, 0.04), glassMat);
+      panelFront.position.set(0, 1.15, 0.894);
       panelFront.castShadow = true;
       cabinGroup.add(panelFront);
 
-      const panelRear = new THREE.Mesh(new THREE.BoxGeometry(0.82, 1.0, 0.04), glassMat);
-      panelRear.position.set(0, 1.0, -0.36);
+      const panelRear = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.55, 0.04), glassMat);
+      panelRear.position.set(0, 1.15, 0.174);
       cabinGroup.add(panelRear);
 
-      const panelLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.0, 0.72), glassMat);
-      panelLeft.position.set(-0.41, 1.0, 0);
+      const panelLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.55, 0.72), glassMat);
+      panelLeft.position.set(-0.41, 1.15, 0.534);
       cabinGroup.add(panelLeft);
 
-      const panelRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.0, 0.72), glassMat);
-      panelRight.position.set(0.41, 1.0, 0);
+      const panelRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.55, 0.72), glassMat);
+      panelRight.position.set(0.41, 1.15, 0.534);
       cabinGroup.add(panelRight);
 
       // Roof
       const roof = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.055, 0.78), catYellow);
-      roof.position.set(0, 1.5, 0);
+      roof.position.set(0, 1.5, 0.534);
       roof.castShadow = true;
       cabinGroup.add(roof);
 
       // Roof lip overhang
       const roofLip = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.028, 0.82), catYellowDark);
-      roofLip.position.set(0, 1.45, 0);
+      roofLip.position.set(0, 1.45, 0.534);
       cabinGroup.add(roofLip);
 
       // ROPS pillars (4 corner structural bars)
-      [[-0.38, 0.34], [0.38, 0.34], [-0.38, -0.34], [0.38, -0.34]].forEach(([px, pz]) => {
+      [[-0.38, 0.88], [0.38, 0.88], [-0.38, 0.194], [0.38, 0.194]].forEach(([px, pz]) => {
         const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.0, 0.04), catYellowDark);
         pillar.position.set(px, 1.0, pz);
         pillar.castShadow = true;
@@ -317,40 +312,40 @@ const EquipmentBulldozer = ({ className }) => {
 
       // Interior: seat
       const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.06, 0.24), seatMat);
-      seatCushion.position.set(0, 0.9, -0.04);
+      seatCushion.position.set(0, 0.9, 0.494);
       cabinGroup.add(seatCushion);
 
       const seatBack = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.3, 0.05), seatMat);
-      seatBack.position.set(0, 1.0, -0.16);
+      seatBack.position.set(0, 1.0, 0.374);
       seatBack.rotation.x = 0.1;
       cabinGroup.add(seatBack);
 
       // Armrests
       [-0.14, 0.14].forEach(ax => {
         const arm = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.04, 0.22), darkSteel);
-        arm.position.set(ax, 0.96, -0.05);
+        arm.position.set(ax, 0.96, 0.494);
         cabinGroup.add(arm);
       });
 
       // Steering column & wheel
-      const column = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.22, 8), darkSteel);
-      column.position.set(0, 0.99, 0.16);
-      column.rotation.x = 0.45;
+      const column = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.15, 8), darkSteel);
+      column.position.set(0, 0.9, 0.75);
+      column.rotation.x = 0.3;
       cabinGroup.add(column);
 
       const steerHub = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.025, 8), darkSteel);
-      steerHub.rotation.x = Math.PI / 2 + 0.45;
-      steerHub.position.set(0, 0.99, 0.25);
+      steerHub.rotation.x = Math.PI / 2 + 2.95;
+      steerHub.position.set(0, 0.99, 0.784);
       cabinGroup.add(steerHub);
 
       const steerWheel = new THREE.Mesh(new THREE.TorusGeometry(0.085, 0.014, 8, 24), darkSteel);
-      steerWheel.rotation.x = Math.PI / 2 + 0.45;
-      steerWheel.position.set(0, 0.99, 0.25);
+      steerWheel.rotation.x = Math.PI / 2 + 2.45;
+      steerWheel.position.set(0, 0.99, 0.784);
       cabinGroup.add(steerWheel);
 
       // Dashboard / instrument panel
       const dash = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.12, 0.06), darkSteel);
-      dash.position.set(0, 0.99, 0.3);
+      dash.position.set(0, 0.9, 0.834);
       dash.rotation.x = -0.3;
       cabinGroup.add(dash);
 
@@ -358,7 +353,7 @@ const EquipmentBulldozer = ({ className }) => {
       for (let gi = 0; gi < 3; gi++) {
         const gx = -0.18 + gi * 0.18;
         const gauge = new THREE.Mesh(new THREE.CircleGeometry(0.03, 12), grilleMat);
-        gauge.position.set(gx, 0.99, 0.33);
+        gauge.position.set(gx, 0.9, 0.86);
         gauge.rotation.x = -0.3;
         cabinGroup.add(gauge);
       }
@@ -380,7 +375,7 @@ const EquipmentBulldozer = ({ className }) => {
         bladeGroup.add(pushArm);
 
         // Gusset plate at blade end
-        
+
 
         // Ball joint pin at frame
         const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.14, 10), chrome);
@@ -390,7 +385,7 @@ const EquipmentBulldozer = ({ className }) => {
       });
 
       // Hydraulic tilt cylinder (centre)
-      
+
 
       // Lift hydraulics (2 outer)
       [-0.32, 0.32].forEach(hx => {
@@ -399,7 +394,7 @@ const EquipmentBulldozer = ({ className }) => {
         liftSleeve.position.set(hx, 0.38, -0.08);
         dozer.add(liftSleeve);
 
-        const liftRod = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.3, 8), chrome);
+        const liftRod = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.55, 16), chrome);
         liftRod.rotation.x = Math.PI / 2.8;
         liftRod.position.set(hx, 0.26, 0.08);
         dozer.add(liftRod);
@@ -490,10 +485,10 @@ const EquipmentBulldozer = ({ className }) => {
       bladeGroup.add(bladeCrossTube);
 
       // Blade reinforcement ribs
-     
+
 
       // Blade top rolled lip
-      
+
 
       const bladeTop = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.04, 0.2), catYellowDark);
       bladeTop.position.set(0, 0.33, 0.58);
@@ -581,6 +576,81 @@ const EquipmentBulldozer = ({ className }) => {
       const rim = new THREE.DirectionalLight(0x4488ff, 1.2);
       rim.position.set(0, 2, -5);
       scene.add(rim);
+
+      // ── Hydraulic hoses (curved tubes) ─────────────────────────────────────
+      const createHydraulicHose = (start, mid, end) => {
+        const curve = new THREE.CatmullRomCurve3([
+          start,
+          mid,
+          end,
+        ]);
+
+        const geometry = new THREE.TubeGeometry(
+          curve,
+          24,
+          0.015,
+          10,
+          false
+        );
+
+        const hose = new THREE.Mesh(
+          geometry,
+          new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            roughness: 0.95,
+            metalness: 0.05,
+          })
+        );
+
+        hose.castShadow = true;
+        return hose;
+      };
+
+      const hoseLeft = createHydraulicHose(
+        new THREE.Vector3(-0.32, 0.75, 0.6),
+        new THREE.Vector3(-0.55, 0.55, 0.85),
+        new THREE.Vector3(-0.45, 0.55, 1.15)
+      );
+
+      const hoseRight = createHydraulicHose(
+        new THREE.Vector3(0.32, 0.75, 0.6),
+        new THREE.Vector3(0.55, 0.65, 0.85),
+        new THREE.Vector3(0.45, 0.55, 1.15)
+      );
+
+      dozer.add(hoseLeft);
+      dozer.add(hoseRight);
+
+
+      const jointMat = new THREE.MeshStandardMaterial({
+        color: 0xb7c2c8,
+        roughness: 0.2,
+        metalness: 1,
+      });
+
+      function addJoint(x, y, z) {
+        const joint = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.025, 0.025, 0.05, 12),
+          jointMat
+        );
+
+        joint.rotation.z = Math.PI / 2;
+        joint.position.set(x, y, z);
+
+        dozer.add(joint);
+      }
+
+      addJoint(-0.32, 0.75, 0.1);
+      addJoint(-0.45, 0.55, 1.15);
+
+      addJoint(0.32, 0.75, 0.6);
+      addJoint(0.45, 0.55, 1.15);
+
+
+
+      //_________________
+      
+
 
       // ── Animation loop ────────────────────────────────────────────────────
       let frameId = 0, resizeFrameId = 0;

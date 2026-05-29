@@ -113,10 +113,11 @@
   width: min(112%, 860px);
   height: auto;
   object-fit: contain;
+  transition: transform 0.4s ease, filter 0.4s ease;
 }
 .visual img:hover {
   transform: translateY(-8px) scale(1.02);
-  transition: filter 0.1s ease, transform 0.1s ease;
+  transition: filter 0.4s ease, transform 0.4s ease;
   filter: drop-shadow(0 28px 60px #12448b) drop-shadow(0 10px 30px rgba(8, 8, 87, 0.5));
   
 }
